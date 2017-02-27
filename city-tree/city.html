@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>城市3级联动</title>
+        <meta charset="utf-8"/>
+        <meta name="author" content="lut">
+        <style type="text/css">
+            *{margin: 0;padding: 0;}
+            html,body{
+                height: 100%;
+            }
+            .box{
+                height: 100%;
+                zoom:1\9;
+            }
+            .box:after{
+                content: "";
+                display: block;
+                clear: both;
+            }
+            .left{
+                float:left;
+                width: 200px;
+                min-height: 100%;
+                background-color: #A7A26E;
+            }
+            .content{
+                padding-left: 200px;
+                *padding-left: 0;
+                min-height: 100%;
+                color: blue
+            }
+            .nav>li{
+                position: relative;
+                width: 60px;
+                padding: 5px 10px;
+                margin: 10px;
+                text-align: center;
+                background-color: #fff;
+                transition: all ease 0.5s;
+                backface-visibility:hidden;
+            }
+            .nav>li>span{
+                position: absolute;
+                left: 0;
+                top: 0;
+                width: 100%;
+                height: 100%;
+                line-height: 30px;
+                transform: rotateX(180deg);
+                opacity: 0;
+            }
+            .content>select{
+                width: 150px;
+                display: inline-block;
+                padding: 5px;
+                margin-top: 20px;
+                margin-left: 15px;
+            }
+        </style>
+    </head>
+    <body>
+        
+        <div id="box" class="box">
+            <div class="left">
+                <ul class="nav">
+                    <li>首页
+                        <span>首页</span>
+                    </li>
+                    <li>文化</li>
+                    <li>娱乐</li>
+                    <li>学习</li>
+                    <li>体育</li>
+                </ul>
+            </div>
+            <div class="content">
+                <select class="js-province"></select>
+                <select class="js-city"></select>
+                <select class="js-district"></select>
+            </div>
+        </div>
+        <script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=5ZmIO6bXbDtdllzdMZwfXmFm"></script>
+        <script type="text/javascript" src="js/city-2.0.js"></script>
+        <script type="text/javascript">
+            var curCity=null;
+            window.onload = function() {
+                // 城市定位
+                curCity=new setCity("js-province","js-city","js-district",document);
+                curCity.init();
+            }
+        </script>
+    </body>
+</html>
+
