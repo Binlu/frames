@@ -108,7 +108,7 @@
 				a.hideFunc(b.erFunc);
 			});
 		},
-		setCss:function(type,options){				//设置样式
+		setCss:function(options){				//设置样式
 			var a=this,b=a.btn1,c=a.btn2,d=a.tar,e=a.box;
 			if(options && options instanceof Object){
 				for(var key in options){
