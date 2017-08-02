@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<!-- <meta http-equiv = "X-UA-Compatible" content = "IE=edge,chrome=1"> -->
+		<meta name="keywords" content="html5,canvas">
+		<meta name="robots" content="all">
+		<meta name="author" content="lut">
+		<title>js获取浏览器尺寸</title>
+		<style type="text/css">
+			*{
+				padding: 0;
+				margin: 0;
+			}
+			a{
+				text-decoration: none;
+				cursor: pointer;
+			}
+			li{
+				list-style: none;
+			}
+			.div1{
+				width: 600px;
+				margin: 50px auto;
+			}
+			
+		</style>
+	</head>
+	<body>
+		<!--[if lt IE 9]>
+			<label>这位少侠，你的刀已经跟不上目前流行刀客的节奏，赶紧升级体验现代浏览器的顺畅吧！</label>
+			<a href="http://windows.microsoft.com/zh-cn/internet-explorer/download-ie" title="下载高本版的ie浏览器，ie19...">下载IE高版本浏览器ie9+</a>或
+			使用<a href="http://rj.baidu.com/soft/detail/14744.html?ald" title="谷歌浏览器下载">chrome</a>
+		<![endif]-->
+		<div class="div1"><div class="c-container js-c-container"><div class="c-head js-c-head"><div class="head-t js-head-t"><a class="c-btn js-prev-btn" href="javascript:;" alt="上一月"></a><div class="c-h js-c-h"><span class="js-c-year">2015</span><span>年</span><span class="js-c-month">11</span><span>月</span></div><a class="c-btn" href="javascript:;" alt="下一月"></a></div><div class="head-tt"><ul class="w-list js-w-list"><li>日</li><li>一</li><li>二</li><li>三</li><li>四</li><li>五</li><li>六</li></ul></div><div class="c-mian"><ul class="d-list js-d-list"><li data-str="2015-11-11">1</li></ul></div></div></div></div>
+		<script type="text/javascript" src="js/calendar-1.0.dev.js"></script>
+		<script type="text/javascript">
+			window.onload=function(){
+				var a=new calendar({
+					box:".div1",
+					date:"2017/09/25"
+				});
+			}
+		</script>
+	</body>
+</html>
