@@ -46,13 +46,22 @@ require(["jquery","swiper","map"],function(jquery,swiper){
         });
         
         /*-----------------方法-----------------*/
-        // 切换产品
+
+        var def={
+            is_set_swiper:false
+        };
+        // 切换页面
         var main_swiper=new swiper(".js-container",{
             direction :'vertical',
             loop: false,
             spaceBetween: 0,
             // nextButton:'.js_next',
-            onSlideChangeEnd: function(swiper){
+            onSlideChangeEnd: function(iswiper){
+                if(iswiper.activeIndex==1 && def.is_set_swiper==false){
+                    page2_swiper.startAutoplay();
+                }else{
+                    page2_swiper.stopAutoplay();
+                }
                 // var j = parseInt(main_swiper.activeIndex);
             },
             onTransitionStart: function(swiper){
@@ -61,10 +70,13 @@ require(["jquery","swiper","map"],function(jquery,swiper){
                 // console.log(j)
             }
         });
+        main_swiper.slideTo(3)
+        //左右切换图片
         var page2_swiper=new swiper(".js-container2",{
             // direction :'vertical',
             loop: true,
             effect:"cube",
+            autoplay:2000,
             cube: {
               slideShadows: true,
               shadow: true,
@@ -82,8 +94,27 @@ require(["jquery","swiper","map"],function(jquery,swiper){
                 // console.log(j)
             }
         });
-        $(".div1").on("click",function(){
-            alert(1)
+        page2_swiper.stopAutoplay();
+
+
+
+        // 音乐播放
+        var audio_ele=document.querySelector(".js-audio-ele");
+        var timer=null,num=0;
+        $(".js-control-btn").on("click",function(){
+            var a=$(this);
+            if(!$(this).hasClass("js-now")){
+                audio_ele.play();
+                $(this).addClass("js-now");
+                timer=setInterval(function(){
+                    a.css({"transform":"rotate("+num+"deg)"});
+                    num++;
+                },30);
+            }else{
+                clearInterval(timer);
+                audio_ele.pause();
+                $(this).removeClass("js-now");
+            }
         });
     });
 });

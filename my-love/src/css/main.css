@@ -5,7 +5,7 @@
 @charset "utf-8";
 *{margin: 0;padding: 0;word-break: break-all;}
 html,body{height: 100%;overflow: hidden;}
-body{font-family:"Microsoft YaHei","SimHei";font-size: 20px;}
+body{font-family:"华文楷体","Microsoft YaHei","SimHei";font-size: 20px;}
 img{width:100%;border:none}
 a{text-decoration: none;}
 li{list-style: none;}
@@ -21,19 +21,34 @@ li{list-style: none;}
     width: 100%;
     height: 100%;padding: 1.5rem 1rem
 }
+.control-btn{display: block;position: fixed;right: 0.5rem;top: 0.5rem;width: 1.2rem;height: 1.2rem;z-index: 10;border-style: none;outline: none;background-color: transparent;
+    /*transition:all 0.5s;*/
+}
+.animate1{
+    -webkit-animation:loading 5s linear infinite;
+    -moz-animation:loading 5s linear infinite;
+    -ms-animation:loading 5s linear infinite;
+    -o-animation:loading 5s linear infinite;
+}
+.audio-ele{display: none;}
 .swiper-container{width: 100%;height: 100%;overflow: hidden;}
 .swiper-wrapper{width: 100%;height: 100%;}
 .page{width: 100%;height: 100%;position: relative;}
-.page>h3{font-size: 1rem;height: 2rem;line-height: 2rem;text-align: center;color: #fff;}
+.page>h3{font-size: 1rem;height: 2rem;line-height: 2rem;padding: 0.5rem 0;text-align: center;color: #fff;}
 .page1{background: #488555}
+.page1>h3{padding-top: 30%}
+.page1>.content-div>p{text-indent: 2em;line-height: 1.5em}
 .page2{background: #951331}
 .page3{background: #137695}
+
+.map-div{margin: 20px 0}
 #map{width: 100%;height: 12rem;}
 .page4{background: #8a5757}
-
+.page4>.content-div>p{text-indent: 2em;line-height: 1.5em}
+.page4>.content-div>a{position: absolute;bottom: 2rem;left: 50%;display: inline-block;font-size: 0.8rem;width: 5rem;height: 1.8rem;margin-left: -2.5rem;line-height: 1.8rem;text-align: center;margin-top: 2rem;background-color: #e33;color: #fff;cursor: pointer;}
 .page .swiper-container{z-index: 10;position: absolute;left: 0;top: 1.5rem;bottom: 0;height: auto;margin: auto;}
 
-.content-div{}
+.content-div{padding: 0 0.5rem}
 .div1{width: 5rem;height: 5rem;background-color: #000;border-radius: 2.5rem;}
 
 #atten-box{
