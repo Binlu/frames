@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>虚拟样衣</title>
+	<meta charset="utf-8">
+	<link rel="stylesheet" type="text/css" href="css/pattern.css">
+	<script type="text/javascript" src="js/jquery-1.11.3.min.js"></script>
+</head>
+<body>
+	
+	<div style="padding:10px;text-align:center">
+		<button class="js-set-type" data-type="1">满身</button>
+		<button class="js-set-type" data-type="2">局部</button>
+		<input class="js-color-area" type="text" holderplace="请输入色号查看">
+	</div>
+	
+	<div class="w1200 content nclear">
+	
+		<!-- 模板 -->
+		<div class="pattern-list-div">
+			<ul class="pattern-tab-list nclear js-pattern-tab-list">
+				<li data-classify-id="11808" class="now-choice"><img src="images/icon1-active.png" alt="icon"><span>女装</span></li>
+				<li data-classify-id="11807"><img src="images/icon2.png" alt="icon"><span>男装</span></li>
+				<li data-classify-id="11809"><img src="images/icon3.png" alt="icon" style="width: 20px"><span>童装</span></li>
+				<li data-classify-id="11810" style="border-right:none"><img src="images/icon4.png" alt="icon" style="width: 20px"><span>配饰</span></li>
+			</ul>
+			<div class="item-box">
+				<div class="contentHolder pattern-list-content js-pattern-list-content">
+					<!-- 模板列表 -->
+					<ul id="pattern_list_{$cid}" class="pattern-list nclear js-pattern-list">
+						<li style="margin-right:0" data-tpl-id="{$img.id}" data-model-src="images/dress-mask.png" data-src="images/81024-preview-large.jpg">
+							<img src="images/dress-mask.png" alt="pic">
+							<span>生成虚拟样衣图</span>
+							<div class="pattern-bg"></div>
+							<div class="border-div"></div>
+						</li>
+					</ul>
+				</div>
+			</div>
+		</div>
+		<!-- 虚拟效果 -->
+		<div class="pattern-box nclear js-pattern-box">
+	        <div class="pattern-area">
+	        	<div class="pattern-div js-pattern-div">
+		            <!-- 模板 -->
+		            <img class="mask-pic js-mask-pic" src="" alt="" ondragstart="return false;">
+		            <!-- 花型 -->
+		            <img class="pattern-pic js-pattern-pic" src="" alt="">
+		        </div>
+	        </div>
+	        <div class="tool-box nclear">
+	        	<a class="js-download-btn" href="javascript:;" title="下载"><img src="images/icon5.png" alt="icon"></a>
+	        	<p>
+	        		<img src="images/icon9.png" alt="icon">
+	        		您可以拖拽图案到任意位置<br/>，滚动鼠标放大或缩小图案内容
+	        	</p>
+	        	<div class="tool-div js-tool-div">
+		            <button class="add-ratio js-add-ratio" title="放大"><img src="images/icon6.png" alt="icon"></button>
+		            <div><button></button></div>
+		            <button class="reduce-ratio js-reduce-ratio" title="缩小"><img src="images/icon7.png" alt="icon"></button>
+		        </div>
+	        </div>
+	    </div>
+	</div>
+
+	<script type="text/javascript">
+		var page_img_path_str="{STATIC_URL2}";
+	</script>
+	<script type="text/javascript" src="js/pattern-cut.js"></script>
+	<script type="text/javascript" src="js/pattern.js"></script>
+
+</body>
+</html>
