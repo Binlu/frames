@@ -48,7 +48,8 @@ require(["jquery","swiper","map"],function(jquery,swiper){
         /*-----------------方法-----------------*/
 
         var def={
-            is_set_swiper:false
+            is_set_swiper:false,
+            nindex:1
         };
         // 切换页面
         var main_swiper=new swiper(".js-container",{
@@ -58,11 +59,15 @@ require(["jquery","swiper","map"],function(jquery,swiper){
             // nextButton:'.js_next',
             onSlideChangeEnd: function(iswiper){
                 if(iswiper.activeIndex==1 && def.is_set_swiper==false){
-                    page2_swiper.startAutoplay();
+                    setTimeout(function(){
+                        page2_swiper.startAutoplay();
+                    },1000);
                 }else{
                     page2_swiper.stopAutoplay();
                 }
                 // var j = parseInt(main_swiper.activeIndex);
+                def.nindex=iswiper.activeIndex+1;
+                setMove(iswiper.activeIndex);
             },
             onTransitionStart: function(swiper){
                 // var j = parseInt(main_swiper.activeIndex);
@@ -70,7 +75,12 @@ require(["jquery","swiper","map"],function(jquery,swiper){
                 // console.log(j)
             }
         });
-        main_swiper.slideTo(3)
+        // main_swiper.slideTo(2)
+
+        $(".js-next").on("touchstart",function(){
+            main_swiper.slideTo(def.nindex);
+        });
+
         //左右切换图片
         var page2_swiper=new swiper(".js-container2",{
             // direction :'vertical',
@@ -78,8 +88,8 @@ require(["jquery","swiper","map"],function(jquery,swiper){
             effect:"cube",
             autoplay:2000,
             cube: {
-              slideShadows: true,
-              shadow: true,
+              slideShadows: false,
+              shadow: false,
               shadowOffset: 100,
               shadowScale: 0.6
             },
@@ -101,6 +111,14 @@ require(["jquery","swiper","map"],function(jquery,swiper){
         // 音乐播放
         var audio_ele=document.querySelector(".js-audio-ele");
         var timer=null,num=0;
+
+        audio_ele.play();
+        $(".js-control-btn").addClass("js-now");
+        timer=setInterval(function(){
+            $(".js-control-btn").css({"transform":"rotate("+num+"deg)"});
+            num++;
+        },30);
+
         $(".js-control-btn").on("click",function(){
             var a=$(this);
             if(!$(this).hasClass("js-now")){
@@ -117,4 +135,41 @@ require(["jquery","swiper","map"],function(jquery,swiper){
             }
         });
     });
+
+    setMove(0);
+
+    function setMove(nindex){
+        switch(nindex){
+            case 0:
+                $(".js-next").fadeIn(400);
+                $(".js-p1-move1").addClass("move1");
+                $(".js-p1-move2").delay(1200).fadeIn(600,function(){
+                    $(".js-p1-move3").addClass("move2");
+                    $(".js-p1-move4").addClass("move3");
+                    $(".js-p1-move5").addClass("move2");
+                });
+                break;
+            case 1:
+                $(".js-next").fadeIn(400);
+                $(".js-p2-move1").addClass("move2");
+                $(".js-container2").delay(500).animate({"opacity":1});
+                break;
+            case 2:
+                $(".js-next").fadeIn(400);
+                $(".js-p3-move1").fadeIn(500,function(){
+                    $(".js-p3-move2").addClass("move4")
+                    $(".js-p3-move3").addClass("move4")
+                    $(".js-p3-move4").addClass("move4")
+                });
+                break;
+            case 3:
+                $(".js-next").fadeOut(400);
+                $(".js-p4-move1").addClass("move5");
+                setTimeout(function(){
+                    $(".js-p4-move2").addClass("move2");
+                    $(".js-p4-move3").addClass("move2");
+                },1000)
+                break;
+        }
+    }
 });
