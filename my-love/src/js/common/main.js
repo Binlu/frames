@@ -85,13 +85,22 @@ require(["jquery","swiper","map"],function(jquery,swiper){
         var page2_swiper=new swiper(".js-container2",{
             // direction :'vertical',
             loop: true,
-            effect:"cube",
+            effect:"coverflow",
             autoplay:2000,
-            cube: {
-              slideShadows: false,
-              shadow: false,
-              shadowOffset: 100,
-              shadowScale: 0.6
+            // cube: {
+            //   slideShadows: false,
+            //   shadow: false,
+            //   shadowOffset: 100,
+            //   shadowScale: 0.6
+            // },
+            slidesPerView: 1,
+            centeredSlides: true,
+            coverflow:{
+                rotate: 80,
+                stretch: 10,
+                depth: 10,
+                modifier: 1,
+                slideShadows : false
             },
             spaceBetween: 0,
             // nextButton:'.js_next',
@@ -136,7 +145,9 @@ require(["jquery","swiper","map"],function(jquery,swiper){
         });
     });
 
-    setMove(0);
+    setTimeout(function(){
+        setMove(0);
+    },1000);
 
     function setMove(nindex){
         switch(nindex){

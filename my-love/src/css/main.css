@@ -60,8 +60,8 @@ li{list-style: none;}
 }
 .p1-pic2{width: 1.5rem;vertical-align: -0.2rem;}
 .p1-pic3{width: 1.8rem;vertical-align: -0.1rem;}
-.page2 .swiper-container{opacity: 0}
-.page2>h3{padding-top: 10%;
+.page2 .swiper-container{opacity: 0;top: 3rem}
+.page2>h3{padding-top: 2%;
     opacity: 0;
     -webkit-transition:all 1s;
     -webkit-transform:translateY(-2rem);
@@ -102,7 +102,7 @@ li{list-style: none;}
 }
 
 
-.page .swiper-container{z-index: 10;position: absolute;left: 0;top: 1.5rem;bottom: 0;height: auto;margin: auto;}
+.page .swiper-container{z-index: 10;position: absolute;left: 0;top: 3.5rem;bottom: 0;height: auto;margin: auto;}
 .content-div{padding: 0 0.5rem}
 .div1{width: 5rem;height: 5rem;background-color: #000;border-radius: 2.5rem;}
 
