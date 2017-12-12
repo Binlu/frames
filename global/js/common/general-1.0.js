@@ -35,15 +35,7 @@ define(["jquery","msg"],function(jquery,msg){
                     obj.setAttribute("data-times",times);
                 }
             },
-            stopBubble:function(ev){            // 阻止事件冒泡
-                var e=ev || window.event;
-                if(e && e.stopPropagation){
-                    e.stopPropagation();
-                }else{
-                    window.event.cancelBubble=true;
-                }
-                return false;
-            },
+            
             cutStr:function(str,len){                   //截取字符串
                 if(typeof str==="string" && len>0){
                     if(str.length>len){
@@ -222,6 +214,132 @@ define(["jquery","msg"],function(jquery,msg){
                     method.apply(context,arr);
                 },times!=undefined?times:50);
             },
+
+
+
+
+
+            /*-------------------------dom-------------------------*/
+            getEle:function(str,op){                                         //获取元素
+                var opar=(op!=undefined && typeof op=="object")?op:document;
+                var a=this;
+                if(str && typeof str =="string"){
+                    var re1=/^\..+/;
+                    var re2=/^#.+/;
+                    if(re1.test(str)){
+                        if(document.querySelectorAll){
+                            return opar.querySelectorAll(str);
+                        }else{
+                            return a.getByClass(opar,str.slice(1));
+                        }
+                    }else if(re2.test(str)){
+                        if(document.querySelector){
+                            return opar.querySelector(str);
+                        }else{
+                            return opar.getElementById(str.slice(1));
+                        }
+                    }else{
+                        if(document.querySelectorAll){
+                            return opar.querySelectorAll(str);
+                        }else{
+                            return opar.getElementsByTagName(str);
+                        }
+                    }
+                }else{
+                    return null;
+                }
+            },
+            getByClass:function(parent,tagname){                    // 获取class
+                var doms=[];
+                if(arguments.length!=0 && arguments.length>1){
+                    var opar=(typeof parent =="object" && parent.nodeName!="undefined")?parent:document;
+                    if(document.querySelectorAll){
+                        doms=opar.querySelectorAll("."+tagname);
+                    }else{
+                        var eles=opar.getElementsByTagName("*");
+                        for(var i=0,len=eles.length;i<len;i++){
+                            if(eles[i].className.indexOf(tagname)!=-1){
+                                var arr_class=eles[i].className.split(" ");
+                                for(var j=0,len=arr_class.length;j<len;j++){
+                                    if(arr_class[j]==tagname){
+                                        doms.push(eles[i]);
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+                return doms;
+            },
+            getStyle: function(obj,name){                           // 获取样式
+                if(window.getComputedStyle){
+                    return getComputedStyle(obj,false)[name];
+                }else if(obj.currentStyle){
+                    return obj.currentStyle[name];
+                }else{
+                    return "";
+                }
+            },
+            emptyEle:function(obj){                                 //清除子节点
+                var a=this;
+                var childrens=obj.childNodes;
+                var len=childrens.length;
+                if(len>0){
+                    obj.removeChild(childrens[len-1]);
+                    a.emptyEle(obj);
+                }
+            },
+
+            /*-------------------------event-------------------------*/
+            
+            addEvent:function(obj,type,func){                       // 事件绑定
+                // obj==目标对象，type==事件,func==绑定的函数
+                if(obj.addEventListener){
+                    obj.addEventListener(type,func,false);
+                }
+                else if(obj.attachEvent){
+                    // ie
+                    obj.attachEvent("on"+type,func);
+                }else{
+                    obj.on[type]=function(){
+                        func();
+                    }
+                }
+            },
+            removeEvent:function(obj,type,func){                    // 取消事件绑定
+                if(obj.removeEventListener){
+                    obj.removeEventListener(type,func,false);
+                }
+                else if(obj.detachEvent){
+                    obj.detachEvent("on"+type,func);
+                }else{
+                    obj.on[type]=null;
+                }
+            },
+            stopBubble:function(ev){                    // 阻止事件冒泡
+                var e=ev || window.event;
+                if(e && e.stopPropagation){
+                    e.stopPropagation();
+                }else{
+                    window.event.cancelBubble=true;
+                }
+                return false;
+            },
+            stopDefault: function(ev){                  // 阻止浏览器默认事件
+                var e=ev || window.event;
+                if(e && e.preventDefault){
+                    e.preventDefault();
+                }
+                else{
+                    window.event.returnValue=false;
+                }
+                return false;
+            },
+            /*-------------------------http-------------------------*/
+
+
+
+
             subAjax:function(options){                  //jquery  ajax封装
 
                 var isError=options["isError"]!==undefined?options["isError"]:true,

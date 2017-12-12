@@ -20,7 +20,7 @@
     function loopFunc(opt){
         if(opt && opt instanceof Object){
             if(opt["container"]!==undefined){
-                this.box=this.getEle(opt["container"])[0];                                                                      //包含框
+                this.box=this.getEle(opt["container"]).length!=undefined?this.getEle(opt["container"])[0]:this.getEle(opt["container"]);                                                                      //包含框
                 this.ul=this.getEle(".js-page-list",this.box)[0];                                                               //移动对象
                 this.origin_items=this.getEle("li",this.ul);                                                                    //初始轮播对象
                 this.items=null;                                                                                                //实际轮播对象
