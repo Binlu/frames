@@ -22,7 +22,8 @@
             if(opt["container"]!==undefined){
                 this.box=this.getEle(opt["container"])[0];                                                                      //包含框
                 this.ul=this.getEle(".js-page-list",this.box)[0];                                                               //移动对象
-                this.items=null;                                                                                                //轮播对象
+                this.origin_items=this.getEle("li",this.ul);                                                                    //初始轮播对象
+                this.items=null;                                                                                                //实际轮播对象
                 this.prev=this.getEle(".js-prev",this.box)[0];                                                                  //前一个
                 this.next=this.getEle(".js-next",this.box)[0];                                                                  //下一个
                 this.progres=this.getEle(".js-progress-bar",this.box)[0];                                                       //进度框
@@ -40,7 +41,7 @@
                     height:           opt["height"],                                                                            //包含框高度
                     ow:               0,                                                                                        //移动距离x
                     oh:               0,                                                                                        //移动距离y
-                    len:              0                                                                                         //轮播长度
+                    len:              this.origin_items.length                                                                                         //轮播长度
                 };
                 
                 this.timer=null;                                                                                                //计时器
@@ -55,11 +56,10 @@
     loopFunc.prototype={
         init:function(){                                                            //初始化
             var a=this,d=a.def;
-            var a_li=a.getEle("li",a.ul);
-            if(a_li.length<1){
+            if(d.len<1){
                 throw "the dom of ul li is none";
             }else{
-                a.setDom(a_li);
+                a.setDom();
                 // 设置样式
                 a.reStyle();
                 if(d.loop==true){
@@ -71,7 +71,7 @@
                 
             }
         },
-        setDom:function(a_li){                                                      //生成dom
+        setDom:function(){                                                      //生成dom
             var a=this,d=a.def;
             // 配置属性
             if(a.width!==undefined){
@@ -81,16 +81,15 @@
                 a.box.style.height=a.height+"px";
             }
             // 增加dom
-            var len=a_li.length;
+            var len=d.len;
             if(len<=1){d.repeat=false;d.loop=false;}
             if(d.repeat===true){
-                var node1=a_li[0].cloneNode(true);
-                var node2=a_li[len-1].cloneNode(true);
-                a.ul.insertBefore(node2,a_li[0]);
+                var node1=a.origin_items[0].cloneNode(true);
+                var node2=a.origin_items[len-1].cloneNode(true);
+                a.ul.insertBefore(node2,a.origin_items[0]);
                 a.ul.appendChild(node1);
             }
             a.items=a.getEle("li",a.ul);
-            d.len=len;
             // 生成进度
             var o_li=null,o_frag=document.createDocumentFragment();
             for(var i=0;i<len;i++){
@@ -228,7 +227,7 @@
             // 循环赋值
             var len=items.length;
             for(var i=0;i<len;i++){
-                if(a.direction==="vertical"){
+                if(d.direction==="vertical"){
                     items[i].style.height=d.oh+"px";
                     items[i].style.float="none";
                 }else{
@@ -236,7 +235,7 @@
                 }
                 
             }
-            if(a.direction==="vertical"){
+            if(d.direction==="vertical"){
                 if(d.repeat==false){
                     a.ul.style.marginTop="0px";
                 }else{

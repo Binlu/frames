@@ -1,14 +1,14 @@
 /*
 	#author		lut000
-	#date 		2017/03/28
+	#date 		2017/12/12
 */
 define(["jquery","msg"],function(jquery,msg){
     return {
         def:{
-            host_origin_path:STATIC_URL1.replace("img1.",""),
-            js_path:"",        //js访问路径
-            img_path:STATIC_URL2,         //图片访问路径
-            img_href:"global/images/",       //本项目图片访问路径
+            host_origin_path:"",
+            js_path:"",                                                         //js访问路径
+            img_path:"",                                                        //图片访问路径
+            img_href:"global/images/",                                          //本项目图片访问路径
             img:{
                 general:"/default_fabric.png",              //默认图片
                 header_default:"header-default.png"         //头像
@@ -22,14 +22,15 @@ define(["jquery","msg"],function(jquery,msg){
         },
         fn:{
             imgLoadError:function(obj,relative_path){             //默认图片
+                var a=this;
                 var times=obj.getAttribute("data-times")?obj.getAttribute("data-times")-0:0;
                 if(times<=2){
                     var _key=obj.getAttribute("data-key")?obj.getAttribute("data-key"):"general";
-                    var _src=ulb.def.img[_key] || ulb.def.img["general"];
+                    var _src=a.def.img[_key] || ulb.def.img["general"];
                     if(arguments.length>1){
                         _src=relative_path+_src;
                     }
-                    obj.src=ulb.def.img_href+_src;
+                    obj.src=a.def.img_href+_src;
                     times++;
                     obj.setAttribute("data-times",times);
                 }
@@ -125,17 +126,6 @@ define(["jquery","msg"],function(jquery,msg){
                     }
                 }
                 return theRequest;
-            },
-            getLastUrl:function(str){        //获取面料id
-                var tmpHPage = str.split( "/" );
-                var thisHPage = tmpHPage[ tmpHPage.length-2];
-                if(tmpHPage.length<=6){
-                    thisHPage=tmpHPage[ tmpHPage.length-1];
-                }
-                if(thisHPage.indexOf("?")>0){
-                    thisHPage = thisHPage.substring(0,thisHPage.indexOf("?"));
-                }
-                return thisHPage.split("#")[0];
             },
             /*----------------浏览器存储-----------------*/ 
             getSession:function(session_name){                  //获取本地存储
