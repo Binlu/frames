@@ -271,6 +271,17 @@ define(["jquery","msg"],function(jquery,msg){
                 }
                 return doms;
             },
+            getNextEle:function(obj){
+                var a=this;
+                var next_ele=obj.nextSibling;
+                if(next_ele==undefined){
+                    return undefined;
+                }else if(next_ele.nodeType===1){
+                    return next_ele
+                }else{
+                    return a.getNextEle(obj.nextSibling);
+                }
+            },
             getStyle: function(obj,name){                           // 获取样式
                 if(window.getComputedStyle){
                     return getComputedStyle(obj,false)[name];
