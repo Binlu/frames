@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>模拟select</title>
+		<meta charset="utf-8"/>
+		<meta name="author" content="lut">
+		<style type="text/css">
+			*{margin: 0;padding: 0;}
+			/*select样式*/
+			.select-div{
+				display: inline-block;
+			    position: relative;
+			    width: 365px;
+			    margin: 100px auto;
+			    border: 1px solid #d2d2d2;
+			    background-color: #fff;
+			    -webkit-user-select: none; /* Chrome all / Safari all */
+			    -moz-user-select: none; /* Firefox all */
+			    -ms-user-select: none; /* IE 10+ */
+			    -o-user-select: none; /* opera */
+			    user-select: none;
+			}
+			.select-spn{
+			    display: block;
+			    padding: 0 10px;
+			    height: 40px;
+			    line-height: 40px;
+			    background-image: url(../../images/home/icon7.png);background-repeat: no-repeat;background-position: 95% center;
+			    cursor: pointer;
+			    color: #333;
+			}
+			.select-spn.now-choice{color: #333;}
+			.option-list{
+			    z-index: 10;
+			    position: absolute;
+			    left: 0;
+			    top: 45px;
+			    width: 100%;
+			    background-color: #fff;
+			    border: 1px solid #d2d2d2;
+			    display: none;
+			    color: #333;
+			}
+			.option-list>li{
+			    padding: 0 10px;
+			    height: 36px;
+			    line-height: 36px;
+			}
+			.option-list>li:hover{
+			    background-color: #d8b056;
+			    color: #fff;
+			}
+		</style>
+	</head>
+	<body>
+		<div class="select-div js-select-div">
+            <span class="select-spn" value="">请选择</span>
+            <ul class="option-list">
+                <li value="0">请选择</li>
+                <li value="1">北京</li>
+                <li value="2">上海</li>
+                <li value="3">广州</li>
+            </ul>
+        </div>
+		<script type="text/javascript" src="../global/js/lib/require.js"></script>
+		<script type="text/javascript">
+			require.config({
+				baseUrl:"js",
+				urlArgs:"r="+(new Date()).getTime(),
+				paths:{
+					"jquery":["../../global/js/lib/jquery/jquery-1.11.3.min"],
+			        "general":["../../global/js/common/general-1.0"],
+			        "msg":["../../global/js/common/pop-msg-1.2.development"],
+			        "select":["select-1.0"]
+			    },
+			    shim:{
+			        "general":{
+			            deps:["jquery"],
+			            exports:"general"
+			        },
+			        "msg":{
+			            deps:["jquery"],
+			            exports:"msg"
+			        },
+			        "select":{
+			            deps:["general"]
+			        }
+			    }
+			});
+
+			require(["select"],function(){
+
+			});
+
+		</script>
+
+	</body>
+</html>
