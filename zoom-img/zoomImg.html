@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<link href="img/favicon.ico" rel="shortcut icon" type="images/x-icon">
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<meta content="initial-scale=1.0,maximum-scale=1.0,width=device-width" name="viewport">
+		<meta name="apple-touch-fullscreen" content="YES">
+		<meta name="format-detection" content="telephone=no">
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="apple-mobile-web-app-status-bar-style" content="black">
+		<meta http-equiv="expires" content="0">
+		<meta http-equiv="pragma" content="no-cache">
+		<meta http-equiv="cache-control" content="no-cache">
+		<title>移动端图片缩放</title>
+		<script type="text/javascript" src="js/touch.min.js"></script>
+		<style type="text/css">
+			*,
+			html,
+			body {
+				padding: 0px;
+				margin: 0px;
+				left: 0px;
+				top: 0px;
+			}
+			
+			#play {
+				position: fixed;
+				left: 0;
+				top: 0;
+				background: black;
+				width: 100%;
+				height: 100%;
+				overflow: hidden;
+			}
+			
+			#target {
+				position: absolute;
+				left: 14%;
+				top: 20%;
+				width: 72%;
+				display: block;
+				
+			}
+		</style>
+	</head>
+	<body>
+		<div id="main">
+			<div id="play">
+				<img id="target" draggable="false" src="http://pic50.nipic.com/file/20141009/18691690_111045114040_2.jpg" />
+			</div>
+		</div>
+		<script type="text/javascript">
+			!function(){
+
+				function getStyle(obj,name){					// 获取样式
+					if(obj.currentStyle){
+						return obj.currentStyle[name];
+					}
+					else{
+						return getComputedStyle(obj,false)[name];
+					}
+				};
+				//设置样式
+				function setStyle(obj,opt){
+					if(typeof opt !="object") throw error("opt is not object!");
+					for(var key in opt){
+						switch(key){
+							case "transition":
+								obj.style.webkitTransform=obj.style.mozTransform=obj.style.oTransform=obj.style.msTransform=opt[key];
+								break;
+							default:
+								obj.style[key]=opt[key];
+						}
+					}
+				};
+				function getSize(){
+					var _src=n_tag.src;
+					var o_img=new Image();
+					def.ow=parseInt(getStyle(n_tag,"width"));
+					def.oh=0;
+					def.offset_left=n_tag.offsetLeft;
+					def.limit_x=-(n_tag.offsetLeft+def.ow)+def.min_val;
+					o_img.onload=function(){
+						def.oh=parseInt(def.ow*this.height/this.width);
+						def.limit_y=-(n_tag.offsetTop+def.oh)+def.min_val;
+					}
+					o_img.src=_src;
+				};
+				/*对象*/ 
+				var n_tag= document.querySelector("#target");
+				var box = document.getElementById("play");
+				setStyle(n_tag,{
+					"transition":"all ease 0.05s"
+				});
+				/*数据json*/ 
+				var def={
+					zoom_str:"",
+					move_str:"",
+					min_val:20,			//限制
+					x:0,			//prev位置x
+					y:0,				//prev位置y
+					scale:1			//放大比例
+				};
+				//设置宽高
+				getSize();
+				/*事件绑定*/ 
+				//阻止默认事件
+				touch.on('#play', 'touchstart', function(ev) {
+					ev.preventDefault();
+				});
+				//缩放
+				var n_scale=0;
+				touch.on('#play', 'pinch', function(ev) {
+					var currentScale=ev.scale+(def.scale-1);
+					currentScale = currentScale > 5 ? 5 : currentScale; //自己调节可以放大的最大倍数
+					currentScale = currentScale < 0.1 ? 0.1 : currentScale; //自己调节可以缩小的最小倍数
+					setStyle(n_tag,{
+						"transform":"scale("+currentScale+")"+" "+def.move_str
+					});
+					n_scale=currentScale;
+				});
+				touch.on('#play', 'pinchend', function(ev) {
+					def.scale=n_scale;
+					def.zoom_str="scale("+def.scale+")";
+				});
+
+				//拖拽
+ 				var n_x=0,n_y=0;
+ 				touch.on('#target', 'drag', function(ev) {
+ 					var _x=def.x+ev.x;
+ 					var _y=def.y+ev.y;
+ 					if(Math.abs(_x)>=Math.abs(def.limit_x)){
+ 						_x=_x<0?def.limit_x:-def.limit_x;
+ 					}
+ 					if(Math.abs(_y)>=Math.abs(def.limit_y)){
+ 						_y=_y<0?def.limit_y:-def.limit_y;
+ 					}
+ 					setStyle(n_tag,{
+						"transform":"translate3d("+_x+"px,"+_y+"px,0)"+" "+def.zoom_str
+					});
+					n_x=_x;
+					n_y=_y;
+ 				});
+ 				touch.on('#target', 'dragend', function(ev) {
+ 					def.x=n_x;
+ 					def.y=n_y;
+					def.move_str="translate3d("+def.x+","+def.y+",0)";
+ 				});
+			}();
+		</script>
+	</body>
+</html>

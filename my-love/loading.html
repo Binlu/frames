@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8"/>
+        <meta name="author" content="lut"/>
+        <meta name="keywords" content="my,wedding"/>
+        <meta name="description" content="my wedding show"/>
+        <meta name="format-detection" content="telephone=no"/>
+        <meta name="viewport" content="initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no"/>
+        <title>we wedding</title>
+        <link rel="stylesheet" href="src/css/main.css"/>
+        <script type="text/javascript" src="src/js/lib/require.js"></script>
+    </head>
+    <body>
+        <!-- view -->
+        <section id="view-section">
+            <section class="content">
+                <div class="loading-div js-loading-div">
+                    <span>loading...</span>
+                    <div><span></span></div>
+                </div>
+            </section>
+        </section>
+        <!-- js -->
+        <script type="text/javascript">
+            require.config({
+                baseUrl:"src/js",
+                paths:{
+                    "jquery":["lib/jquery-2.1.4.min"],
+                }
+            });
+            require(["jquery"],function(jquery){
+                $(function(){
+                    var def={
+                        img_arr:["1.jpg","2.jpg","3.jpg","4.jpg","5.jpg","6.jpg","7.jpg","8.jpg","9.jpg","10.jpg","1.png","2.png","3.png","icon1.png"],
+                        tag_ele:$(".js-loading-div>div>span"),
+                    };
+                    loadingFunc(0);
+
+                    function loadingFunc(num){
+                        var arr=def.img_arr,len=arr.length;
+                        if(num<len){
+                            var img=new Image();
+                            var src=arr[num];
+                            var ratio=num/len*100;
+                            img.onload=img.onerror=function(){
+                                def.tag_ele.css({"width":ratio+"%"});
+                                console.log(num,ratio)
+                                num++;
+                                loadingFunc(num);
+                                // setTimeout(function(){
+                                //     loadingFunc(num);
+                                // },500)
+                            }
+                            img.src="src/images/"+arr[num];
+                        }else{
+                            def.tag_ele.css({"width":100+"%"});
+                            setTimeout(function(){
+                                window.location.href="index.html";
+                            },1000);
+                            // console.log(1)
+                        }
+                    };
+                });
+            });
+        </script>
+    </body>
+</html>

@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>弹出提示框</title>
+		<meta charset="utf-8"/>
+		<meta name="author" content="lut">
+		<style type="text/css">
+			*{margin: 0;padding: 0;}
+			html,body{
+				height: 100%;
+			}
+			.box{
+				height: 100%;
+				zoom:1\9;
+			}
+			.box:after{
+				content: "";
+				display: block;
+				clear: both;
+			}
+			.left{
+				float:left;
+				width: 200px;
+				min-height: 100%;
+				background-color: #A7A26E;
+			}
+			.content{
+				padding-left: 200px;
+				*padding-left: 0;
+				min-height: 100%;
+			}
+			.content>h3{
+				padding: 15px;
+				color: #f52
+			}
+			.content>p{
+				padding: 15px;
+			}
+			.content>p>a{
+				margin-left: 15px
+			}
+			.nav>li{
+				position: relative;
+				width: 60px;
+				padding: 5px 10px;
+				margin: 10px;
+				text-align: center;
+				background-color: #fff;
+				transition: all ease 0.5s;
+				backface-visibility:hidden;
+			}
+			.nav>li>span{
+				position: absolute;
+				left: 0;
+				top: 0;
+				width: 100%;
+				height: 100%;
+				line-height: 30px;
+				transform: rotateX(180deg);
+				opacity: 0;
+			}
+		</style>
+	</head>
+	<body>
+		<div id="box" class="box">
+			<div class="left">
+				<ul class="nav">
+					<li>首页
+						<span>首页</span>
+					</li>
+					<li>文化</li>
+					<li>娱乐</li>
+					<li>学习</li>
+					<li>体育</li>
+				</ul>
+			</div>
+			<div class="content">
+				<h3>弹出提示框，干掉丑陋的alert</h3>
+				<p>弹出框，只带文字，1s后隐藏<a class="js-btn1" href="javascript:void(0);">点击</a></p>
+				<p>弹出框，带2个按钮<a class="js-btn2" href="javascript:void(0);">点击</a></p>
+				<p>弹出框，带2个按钮，修改按钮名称“保存”，并回调函数<a class="js-btn3" href="javascript:void(0);">点击</a></p>
+			</div>
+		</div>
+		<script type="text/javascript" src="src/lib/jquery-2.1.4.min.js"></script>
+		<script type="text/javascript" src="src/js/pop-msg-1.0.development.js"></script>
+		<script type="text/javascript">
+			// 设置样式
+			$(function(){
+				// pop.setCss({
+				// 	"btns":{
+				// 		"color":"#231",
+				// 		"background-color":"#5e1"
+				// 	}
+				// })
+				// 调用方法
+				$(".js-btn1").on("click",function(){
+					pop.msg({
+						"txt":"我好帅！",
+						"rname":"保存"
+
+					},1000)
+				});
+				$(".js-btn2").on("click",function(){
+					pop.msg({
+						"txt":"上次不是的",
+						"rname":"确定"
+					},function(){
+						alert("我是回调函数的执行内容！");
+					})
+				});
+				$(".js-btn3").on("click",function(){
+					pop.msg({
+						"txt":"我是有回调函数的，看console",
+						"rname":"保存"
+					},function(){
+						console.log(1);
+					})
+				});
+			})
+		</script>
+	</body>
+</html>

@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html>
+
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta content="initial-scale=1.0,maximum-scale=1.0,width=device-width" name="viewport">
+        <title>移动端图片缩放</title>
+        <style type="text/css">
+            *{
+                padding: 0px;
+                margin: 0px;
+            }
+            #play {
+                position: fixed;
+                left: 0;
+                top: 0;
+                background: black;
+                width: 100%;
+                height: 100%;
+                overflow: hidden;
+                color: #fff;
+            }
+            #target {
+                position: absolute;
+                left: 14%;
+                top: 20%;
+                width: 72%;
+                display: block;
+            }
+        </style>
+        <script type="text/javascript" src="js/require.js"></script>
+    </head>
+    <body>
+        <div id="main">
+            <div id="play">
+                <span class="js-txt1"></span>
+                <span class="js-txt2"></span>
+                <img id="target" draggable="false" src="http://pic50.nipic.com/file/20141009/18691690_111045114040_2.jpg" />
+            </div>
+        </div>
+        <script type="text/javascript">
+        	require.config({
+        		baseUrl:"js",
+        		paths:{
+        			"touch":"touch.min"
+        		}
+        	});
+        	require(["touch"],function(touch){
+        		function zoomImg(opt){
+                    if(!opt && typeof opt !="object") throw error("opt is not object");
+                    this.box=document.querySelector(opt.box);       //事件监听框
+                    this.tag=this.box.querySelector("img");      //缩放对象
+                    this.def={          //默认数据
+                        zoom_str:"",
+                        move_str:"",
+                        min_val:opt.boundary || 20,         //限制
+                        x:0,            //prev位置x
+                        y:0,                //prev位置y
+                        n_x:0,              //now位置x
+                        n_y:0,              //now位置y
+                        n_scale:0,              //now缩放倍数
+                        scale:1,            //prev缩放倍数
+                        min_scale:opt.min_scale || 0.5,     //最小缩放倍数
+                        max_scale:opt.max_scale || 5        //最大缩放倍数
+                    };
+                    this.init(); 
+                };
+                zoomImg.prototype={         //原型
+                    init:function(){            //初始化
+                        var a=this;
+                        a.setStyle(a.tag,{
+                            "transition":"all ease 0.05s"
+                        });
+                        a.getSize();
+                        a.bindFunc();
+                    },
+                    bindFunc:function(){        //绑定事件
+                        var a=this;
+                        //阻止默认事件
+                        touch.on(a.box, 'touchstart', function(ev) {
+                            ev.preventDefault();
+                        });
+                        //缩放
+                        touch.on(a.box, 'pinch', function(ev) {
+                            document.querySelector(".js-txt1").innerHTML=ev.scale;
+                            var current_scale=ev.scale+(a.def.scale-1);
+                            current_scale = current_scale >a.def.max_scale?a.def.max_scale:current_scale;
+                            current_scale = current_scale <a.def.min_scale?a.def.min_scale:current_scale;
+                            a.setStyle(a.tag,{
+                                "transform":a.def.move_str+" scale("+current_scale+")"
+                            });
+                            a.def.n_scale=current_scale;
+                        });
+                        touch.on(a.box, 'pinchend',function(ev) {
+                            a.def.scale=a.def.n_scale;
+                            a.def.zoom_str="scale("+a.def.scale+")";
+                        });
+                        //拖拽
+                        touch.on(a.tag, 'drag', function(ev) {
+                            var _x=a.def.x+ev.x;
+                            var _y=a.def.y+ev.y;
+                            var k=a.def.scale;
+                            if(Math.abs(_x/k)>=Math.abs(a.def.limit_x)){
+                                _x=_x<0?a.def.limit_x:-a.def.limit_x;
+                            }
+                            if(Math.abs(_y/k)>=Math.abs(a.def.limit_y)){
+                                _y=_y<0?a.def.limit_y:-a.def.limit_y;
+                            }
+                            a.setStyle(a.tag,{
+                                "transform":"translate3d("+_x+"px,"+_y+"px,0) "+a.def.zoom_str
+                            });
+                            a.def.n_x=_x;
+                            a.def.n_y=_y;
+                        });
+                        touch.on(a.tag, 'dragend', function(ev) {
+                            a.def.x=a.def.n_x;
+                            a.def.y=a.def.n_y;
+                            a.def.move_str="translate3d("+a.def.x+"px,"+a.def.y+"px,0)";
+                        });
+                    },
+                    getSize:function(){             //获取数据
+                        var a=this;
+                        var _src=a.tag.src;
+                        var o_img=new Image();
+                        a.def.ow=parseInt(a.getStyle(a.tag,"width"));
+                        a.def.oh=0;
+                        a.def.offset_left=a.tag.offsetLeft;
+                        a.def.limit_x=-(a.tag.offsetLeft+a.def.ow)+a.def.min_val;
+                        o_img.onload=function(){
+                            a.def.oh=parseInt(a.def.ow*this.height/this.width);
+                            a.def.limit_y=-(a.tag.offsetTop+a.def.oh)+a.def.min_val;
+                        }
+                        o_img.src=_src;
+                    },
+                    getStyle:function(obj,name){                    // 获取样式
+                        if(obj.currentStyle){
+                            return obj.currentStyle[name];
+                        }else{
+                            return getComputedStyle(obj,false)[name];
+                        }
+                    },
+                    //设置样式
+                    setStyle:function (obj,opt){
+                        if(typeof opt !="object") throw error("opt is not object!");
+                        for(var key in opt){
+                            switch(key){
+                                case "transform":
+                                    obj.style.webkitTransform=obj.style.mozTransform=obj.style.oTransform=obj.style.msTransform=opt[key];
+                                    break;
+                                case "transition":
+                                    obj.style.webkitTransition=obj.style.mozTransition=obj.style.oTransition=obj.style.msTransition=opt[key];
+                                    break;
+                                default:
+                                    obj.style[key]=opt[key];
+                            }
+                        }
+                    }
+                };
+                //实例化
+                var show_pic=new zoomImg({
+                    box:"#play"
+                });
+        	});
+        </script>
+    </body>
+</html>
