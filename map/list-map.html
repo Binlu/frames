@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8"/>
+        <meta name="author" content="lut"/>
+        <meta name="keywords" content="keywords"/>
+        <meta name="description" content="description"/>
+        <meta name="format-detection" content="telephone=no"/>
+        <meta name="viewport" content="initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no"/>
+        <title>百度地图研究</title>
+        <style type="text/css">
+            *{margin: 0;padding: 0;}
+            html,body{height: 100%;}
+            #map{height: 100%;}
+
+
+            .BMapLabel{border: none !important;background: none !important}
+
+            .info-div{position: relative;font-size: 12px;width: 120px;background-color: rgba(218,80,80,0.8);color: #fff;border: none;}
+            .info-div:hover{background-color: rgba(222,39,39,0.9);}
+            .info-div>a{display: block;padding: 4px 5px;color: #fff;text-decoration: none;}
+            .info-div:before{content: "";display: inline-block;z-index: 10;position: absolute;left: 50%;top: -10px;margin-left: -5px;border:5px solid transparent;border-bottom: 5px solid rgba(218,80,80,0.8)}
+            .info-div:hover:before{border-bottom: 5px solid rgba(222,39,39,0.9)}
+        </style>
+    </head>
+    <body>
+        <div id="map"></div>
+        <script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=BQtrC7t3SWOnelZPBWPMSSZi"></script>
+        <script type="text/javascript" src="http://api.map.baidu.com/library/RichMarker/1.2/src/RichMarker_min.js"></script>
+        <script type="text/javascript" src="TextIconOverlay.js"></script>
+        <script type="text/javascript" src="MarkerClusterer.js"></script>
+        <script type="text/javascript" src="http://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
+        <script type="text/javascript">
+            !function(g){
+                var map = new BMap.Map("map");
+                map.centerAndZoom("上海",12);
+                var map_data=[
+                    {"id":1,list:[
+                            {"tags":"\u7269\u6D41", "price":25965,"area_size":1223,"uid":2429733889, "province":"\u4E0A\u6D77\u5E02", "geotable_id":185763, "modify_time":1521790350, "district":"\u95F8\u5317\u533A", "icon_style_id":"aaa", "create_time":1521258103, "city":"\u4E0A\u6D77\u5E02", "location":[121.4878995, 31.249161709999999], "address":"\u5929\u6F7C\u8DEF", "title":"\u7269\u6D41\u7AD9", "coord_type":3, "type":0, "distance":0, "weight":0},
+                            {"tags":"\u8F7B\u5DE5\u4E1A","price":35621,"area_size":32656, "uid":2429749917, "province":"\u4E0A\u6D77\u5E02", "geotable_id":185763, "modify_time":1521790324, "district":"\u95F8\u5317\u533A", "icon_style_id":"sid1", "create_time":1521263034, "city":"\u4E0A\u6D77\u5E02", "location":[121.482617, 31.248373999999998], "address":"\u4E0A\u6D77\u5E02\u95F8\u5317\u533A\u6C5F\u82CF\u5317\u8DEF61\u53F7", "title":"\u7EBA\u7EC7\u4E00", "coord_type":3, "type":0, "distance":0, "weight":0}
+                        ]
+                    },
+                    {"id":2,list:[
+                            {"tags":"\u4E92\u8054\u7F51", "price":12013,"area_size":2223,"uid":2429749757, "province":"\u4E0A\u6D77\u5E02", "geotable_id":185763, "modify_time":1521790336, "district":"\u8679\u53E3\u533A", "icon_style_id":"sid1", "create_time":1521262974, "city":"\u4E0A\u6D77\u5E02", "location":[121.49408, 31.257187999999999], "address":"\u4E0A\u6D77\u5E02\u8679\u53E3\u533A\u6D77\u5B81\u8DEF252\u53F7", "title":"\u9AD8\u65B0\u6280\u672F", "coord_type":3, "type":0, "distance":0, "weight":0}
+                        ]
+                    },
+                    {"id":3,list:[
+                            {"tags":"\u670D\u88C5", "price":36921,"area_size":12563,"uid":2430429552, "province":"\u4E0A\u6D77\u5E02", "geotable_id":185763, "modify_time":1521790309, "district":"\u9EC4\u6D66\u533A", "icon_style_id":"sid1", "create_time":1521466160, "city":"\u4E0A\u6D77\u5E02", "location":[121.481791, 31.242678000000002], "address":"\u4E0A\u6D77\u5E02\u9EC4\u6D66\u533A\u4E91\u5357\u5317\u8DEF22\u53F7", "title":"\u6E2F\u9646\u9EC4\u6D66\u4E2D\u5FC3", "coord_type":3, "type":0, "distance":0, "weight":0},
+                            {"tags":"IT","price":120153,"area_size":6936,"uid":2430429582, "province":"\u4E0A\u6D77\u5E02", "geotable_id":185763, "modify_time":1521790298, "district":"\u9EC4\u6D66\u533A", "icon_style_id":"sid1", "create_time":1521466167, "city":"\u4E0A\u6D77\u5E02", "location":[121.47417299999999, 31.238356], "address":"\u4E0A\u6D77\u5E02\u9EC4\u6D66\u533A\u6210\u90FD\u5317\u8DEF500", "title":"\u65B0\u660C\u5C0F\u533A", "coord_type":3, "type":0, "distance":0, "weight":0}
+                        ]
+                    },
+                    {"id":4,list:[
+                            {"area_size":2568, "tags":"\u6D4B\u8BD5", "price":15523, "uid":2432746293, "province":"\u4E0A\u6D77\u5E02", "geotable_id":185763, "district":"\u95F5\u884C\u533A", "icon_style_id":"sid1", "create_time":1522055204, "city":"\u4E0A\u6D77\u5E02", "location":[121.393829, 31.110752000000002], "address":"\u4E0A\u6D77\u5E02\u95F5\u884C\u533A\u73E0\u57CE\u8DEF", "title":"\u8398\u57CE\u4E2D\u592E\u516C\u56ED", "coord_type":3, "type":0, "distance":0, "weight":0},
+                            {"area_size":2565, "tags":"test", "price":32012, "uid":2432746440, "province":"\u4E0A\u6D77\u5E02", "geotable_id":185763, "district":"\u95F5\u884C\u533A", "icon_style_id":"sid1", "create_time":1522055230, "city":"\u4E0A\u6D77\u5E02", "location":[121.402021, 31.100178], "address":"\u4E0A\u6D77\u5E02\u95F5\u884C\u533A\u90FD\u5E02\u8DEF4360\u53F7", "title":"\u94F6\u90FD\u82D1", "coord_type":3, "type":0, "distance":0, "weight":0},
+                            {"area_size":2565, "tags":"test`", "price":15265, "uid":2432746740, "province":"\u4E0A\u6D77\u5E02", "geotable_id":185763, "district":"\u95F5\u884C\u533A", "icon_style_id":"sid1", "create_time":1522055288, "city":"\u4E0A\u6D77\u5E02", "location":[121.400611, 31.166194000000001], "address":"\u4E0A\u6D77\u5E02\u95F5\u884C\u533A\u83B2\u82B1\u8DEF1497\u53F7", "title":"\u534E\u4E00\u5B9E\u4E1A\u5927\u53A6", "coord_type":3, "type":0, "distance":0, "weight":0}
+                        ]
+                    }
+                ];
+
+                var baidu_map_fn={
+                    setCustomMap:function(){                //根据daboxId创建自定义图层，用户可用自己创建的geotableid替换30960  
+                        
+                        var customLayer=new BMap.CustomLayer({  
+                            geotableId: 185763,   
+                            q: '', //检索关键字  
+                            tags: '', //空格分隔的多字符串  
+                            filter: 'test' //过滤条件,参考http://lbsyun.baidu.com/index.php?title=lbscloud/api/geosearch  
+                        });
+                        map.addTileLayer(customLayer);//添加自定义图层
+                    },
+                    getAddressPoint:function(city_name,address_name,callback) {            //获取地址经纬度
+                        // 创建地址解析器实例
+                        var myGeo = new BMap.Geocoder();
+                        var self=this;
+                        // 将地址解析结果显示在地图上,并调整地图视野
+                        myGeo.getPoint(address_name,function(point){
+                            if (point) {
+                                map.centerAndZoom(point,14);
+                                callback.call(self,point);
+                            }else{
+                                alert("您选择地址没有解析到结果!");
+                            }
+                        },city_name);
+                    },
+                    setSearch:function(){
+                        var options = {
+                            renderOptions: {
+                                map: map
+                            },
+                            onSearchComplete: function(results) {
+                                var marker = new BMap.Marker(results.center);  // 创建标注
+                                map.addOverlay(marker);               // 将标注添加到地图中
+                                marker.setAnimation(BMAP_ANIMATION_BOUNCE); //跳动的动画
+                            }
+                        };
+                        var localSearch = new BMap.LocalSearch(map, options);                   //定义搜索
+                    },
+                    setPointSearch:function(search_name,point){
+                        var circle = new BMap.Circle(point, 5000, {
+                            fillColor: "blue",
+                            strokeWeight: 1,
+                            fillOpacity: 0.3,
+                            strokeOpacity: 0.3
+                        });     
+                        map.addOverlay(circle);
+                        localSearch.searchNearby(search_name,point, 5000, {
+                            customData: {
+                                geotableId: 185763
+                            }
+                        });
+                    },
+                    addMarker:function(obj){
+                        var self=this;
+
+                        var lng=obj["location"][0],lat=obj["location"][1],title=obj["title"] || "",href=obj["href"] || "https://www.baidu.com";
+                        var point=new BMap.Point(lng,lat);
+                        var marker = new BMap.Marker(point);            // 创建标注
+                        self.addLabelInfo(marker,obj);
+                        map.addOverlay(marker);                         // 将标注添加到地图中
+                        
+                        // marker.setAnimation(BMAP_ANIMATION_BOUNCE);     //跳动的动画
+                    },
+                    getBoundary:function(region_name){                                //添加行政区域    
+                        var bdary = new BMap.Boundary();
+                        bdary.get(region_name,function(rs){         //获取行政区域
+                            // map.clearOverlays();                    //清除地图覆盖物       
+                            var count = rs.boundaries.length;       //行政区域的点有多少个
+                            if (count === 0) {
+                                alert('未能获取当前输入行政区域');
+                                return ;
+                            }
+                            var pointArray = [];
+                            for (var i = 0; i < count; i++) {
+                                var ply = new BMap.Polygon(rs.boundaries[i], {strokeWeight: 2, strokeColor: "#ff0000"}); //建立多边形覆盖物
+                                map.addOverlay(ply);  //添加覆盖物
+                                pointArray = pointArray.concat(ply.getPath());
+                            }    
+                            map.setViewport(pointArray);    //调整视野  
+                        });   
+                    },
+                    addTool:function(){                                  //添加地图控件功能
+                        map.enableScrollWheelZoom(true);     //开启鼠标滚轮缩放
+                    },
+                    setMarkerData:function(data){                           //显示数据
+                        var self=this;
+                        self.getAddressPoint("上海市","南苏州路777",self.setCircle);
+                        for(var i=0,len=data.length;i<len;i++){
+                            self.addMarker(data[i]);
+                        }
+                    },
+                    setDistrict:function(data){                           //显示数据
+                        var self=this;
+                        for(var i=0,len=data.length;i<len;i++){
+                            var district=data[i]["district"] || "";
+                            self.getAddressPoint("上海市",district,function(point){
+                                console.log(point);
+                            });
+                        }
+                    },
+                    setCircle:function(point){
+                        var circle = new BMap.Circle(point, 5000, {
+                            fillColor: "blue",
+                            strokeWeight: 1,
+                            fillOpacity: 0.3,
+                            strokeOpacity: 0.3
+                        });
+                        map.addOverlay(circle);
+                    },
+
+                    getStyles:function(){
+                        return [
+                            {
+                                url:"",
+                                size:new BMap.Size(30, 26),
+                                anchor:[16, 0],
+                                offset:new BMap.Size(30, -30),
+                                textSize:12,
+                                textColor:"#fff"
+                            },
+                            {
+                                url:"",
+                                size:new BMap.Size(30, 26),
+                                anchor:[16, 0],
+                                offset:new BMap.Size(30, -30),
+                                textSize:12,
+                                textColor:"#fff"
+                            }
+                        ]
+                    },
+                    setLabelMarker:function(data){                   //添加富标注
+                        var self=this;
+                        var obj=null,lng=0,lat=0,title="",href="",price=0,area_size=0,district="",point=null,marker=null,markers=[];
+
+                        var htm = '';
+                        
+                        var label_marker=null,label_markers=[];
+                        for(var i=0,len=data.length;i<len;i++){
+                            obj=data[i];
+                            lng=obj["location"][0],lat=obj["location"][1],title=obj["title"] || "",href=obj["href"] || "https://www.baidu.com";
+                            price=obj["price"];
+                            area_size=obj["area_size"];
+                            district=obj["district"];
+                            point=new BMap.Point(lng,lat);
+                            htm='<div class="info-div">'+
+                            '<a href="'+href+'" title="查看详情" target="_blank">'+
+                            title+'<br/>'+
+                            '价格：'+price+'元/㎡<br/>'+
+                            '面积：'+area_size+'㎡<br/>'+
+                            '</a></div>';
+                            // 创建覆盖物
+                            marker=new BMap.Marker(point);            // 创建标注
+                            label_marker=new BMap.Label(htm,{
+                                position:point,
+                                offset:new BMap.Size(-60,0)
+                            });
+                            // 给label增加用户自定义字段
+                            label_marker.price=price;
+                            label_marker.area_size=area_size;
+                            label_marker.district=district;
+                            // map.addOverlay(marker);                              // 将标注添加到地图中
+                            map.addOverlay(label_marker);                           // 将标注添加到地图中
+                            label_markers.push(label_marker);                       //聚合数组
+                            // marker.setAnimation(BMAP_ANIMATION_BOUNCE);          //跳动的动画
+                        }
+                        console.log(label_markers)
+                        
+
+                        markerClusterer.addMarkers(label_markers);
+                        
+
+
+                    },
+                    toggleMarker:function(data,type){
+                        for(var i=0,len=data.length;i<len;i++){
+                            obj=data[i];
+                            if(type==1){
+                                obj.show();
+                            }else{
+                                obj.hide();
+                            }
+                        }
+                    }
+                };
+                baidu_map_fn.addTool();
+                // $.ajax({
+                //     url:"http://api.map.baidu.com/geosearch/v3/local?region=上海&ak=BQtrC7t3SWOnelZPBWPMSSZi&sn=eWVVBCvTzigxo0eu4992ryaKm6GG0W0W&geotable_id=185763",
+                //     type:"get",
+                //     success:function(data){
+                //         console.log(data);
+                //     }
+                // });
+                var markerClusterer = new BMapLib.MarkerClusterer(map,{styles:baidu_map_fn.getStyles(),"minClusterSize":2,"girdSize":100});
+                for(var i=0,len=map_data.length;i<len;i++){
+                    baidu_map_fn.setLabelMarker(map_data[i]["list"]);
+                }
+
+                // baidu_map_fn.setMarkerData(json);
+                // baidu_map_fn.getBoundary("上海市黄浦区");
+                
+                // baidu_map_fn.getAddressPoint("上海市","都市路4633",function(point){
+                //     console.log(point)
+                // });
+
+
+
+                
+                
+                
+            }(window);
+        </script>
+    </body>
+   
+</html>
+
+ 
