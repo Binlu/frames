@@ -42,6 +42,7 @@ var BMapLib = window.BMapLib = BMapLib || {};
      * @return {BMap.Bounds} 返回不越界的视图范围
      */
     var cutBoundsInRange = function (bounds) {
+
         var maxX = getRange(bounds.getNorthEast().lng, -180, 180);
         var minX = getRange(bounds.getSouthWest().lng, -180, 180);
         var maxY = getRange(bounds.getNorthEast().lat, -74, 74);
@@ -152,6 +153,7 @@ var BMapLib = window.BMapLib = BMapLib || {};
      * @return 无返回值。
      */
     MarkerClusterer.prototype.addMarkers = function(markers){
+
         for(var i = 0, len = markers.length; i <len ; i++){
             this._pushMarkerTo(markers[i]);
         }
@@ -563,10 +565,9 @@ var BMapLib = window.BMapLib = BMapLib || {};
         this._clusterMarker.setPosition(this._center);
         
         var nmarker=this.getCustomInfo(this._center);
-        console.log(nmarker);
         // this._map.addOverlay(new BMap.Marker(this._center))
         // this._clusterMarker.setText(this._markers.length);
-        this._clusterMarker.setText('<h3>'+nmarker.district+'</h3>共'+this._markers.length+'个');
+        this._clusterMarker.setText('<h3 style="margin-top:15px;">'+nmarker.district+'</h3>共'+this._markers.length+'个');
 
         var thatMap = this._map;
         var thatBounds = this.getBounds();

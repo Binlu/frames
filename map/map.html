@@ -12,32 +12,39 @@
             *{margin: 0;padding: 0;}
             html,body{height: 100%;}
             #map{height: 100%;}
+
+
+            .BMapLabel{border: none !important;background: none !important}
+
+            .info-div{position: relative;font-size: 12px;width: 120px;background-color: rgba(218,80,80,0.8);color: #fff;border: none;}
+            .info-div:hover{background-color: rgba(222,39,39,0.9);}
+            .info-div>a{display: block;padding: 4px 5px;color: #fff;text-decoration: none;}
+            .info-div:before{content: "";display: inline-block;z-index: 10;position: absolute;left: 50%;top: -10px;margin-left: -5px;border:5px solid transparent;border-bottom: 5px solid rgba(218,80,80,0.8)}
+            .info-div:hover:before{border-bottom: 5px solid rgba(222,39,39,0.9)}
         </style>
-        <link rel="stylesheet" href="http://api.map.baidu.com/library/SearchInfoWindow/1.5/src/SearchInfoWindow_min.css"/>
     </head>
     <body>
         <div id="map"></div>
         <script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=BQtrC7t3SWOnelZPBWPMSSZi"></script>
-        <script type="text/javascript" src="http://api.map.baidu.com/library/SearchInfoWindow/1.5/src/SearchInfoWindow_min.js"></script>
+        <script type="text/javascript" src="TextIconOverlay.js"></script>
+        <script type="text/javascript" src="MarkerClusterer.js"></script>
         <script type="text/javascript" src="http://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
         <script type="text/javascript">
             !function(g){
-                var map = new BMap.Map("map");
-                map.centerAndZoom("上海",14);
-                var json=[{"area_size":123,"price":22323,"tags":"物流","uid":2429733889,"province":"上海市","geotable_id":185763,"modify_time":1521789855,"district":"闸北区","icon_style_id":"aaa","create_time":1521258103,"city":"上海市","location":[121.4878995,31.24916171],"address":"天潼路","title":"物流站","coord_type":3,"type":0,"distance":0,"weight":0},{"area_size":232,"price":15262,"tags":"互联网","uid":2429749757,"province":"上海市","geotable_id":185763,"modify_time":1521789823,"district":"虹口区","icon_style_id":"sid1","create_time":1521262974,"city":"上海市","location":[121.49408,31.257188],"address":"上海市虹口区海宁路252号","title":"高新技术","coord_type":3,"type":0,"distance":0,"weight":0},{"area_size":655,"price":159835,"tags":"轻工业","uid":2429749917,"province":"上海市","geotable_id":185763,"modify_time":1521789798,"district":"闸北区","icon_style_id":"sid1","create_time":1521263034,"city":"上海市","location":[121.482617,31.248374],"address":"上海市闸北区江苏北路61号","title":"纺织一","coord_type":3,"type":0,"distance":0,"weight":0},{"area_size":214,"price":21475,"tags":"服装","uid":2430429552,"province":"上海市","geotable_id":185763,"modify_time":1521789761,"district":"黄浦区","icon_style_id":"sid1","create_time":1521466160,"city":"上海市","location":[121.481791,31.242678],"address":"上海市黄浦区云南北路22号","title":"港陆黄浦中心","coord_type":3,"type":0,"distance":0,"weight":0},{"area_size":365,"price":125895,"tags":"IT","uid":2430429582,"province":"上海市","geotable_id":185763,"modify_time":1521789751,"district":"黄浦区","icon_style_id":"sid1","create_time":1521466167,"city":"上海市","location":[121.474173,31.238356],"address":"上海市黄浦区成都北路500","title":"新昌小区","coord_type":3,"type":0,"distance":0,"weight":0}];
+                var def={
+                    markerClusterer:null
+                };
+                // 初始化地图
+                var map = new BMap.Map("map",{"minZoom":10});
+                var point = new BMap.Point(116.404, 39.915);                    
+                map.centerAndZoom(point,12);                    //点聚合时，必须先用point来定位城市
 
+
+                // 地图数据，目前是上海数据
+                var map_data=[{"tags":"物流","price":25965,"area_size":1223,"uid":2429733889,"province":"上海市","geotable_id":185763,"modify_time":1521790350,"district":"闸北区","icon_style_id":"aaa","create_time":1521258103,"city":"上海市","location":[121.4878995,31.24916171],"address":"天潼路","title":"物流站","coord_type":3,"type":0,"distance":0,"weight":0},{"tags":"轻工业","price":35621,"area_size":32656,"uid":2429749917,"province":"上海市","geotable_id":185763,"modify_time":1521790324,"district":"闸北区","icon_style_id":"sid1","create_time":1521263034,"city":"上海市","location":[121.482617,31.248374],"address":"上海市闸北区江苏北路61号","title":"纺织一","coord_type":3,"type":0,"distance":0,"weight":0},{"tags":"互联网","price":12013,"area_size":2223,"uid":2429749757,"province":"上海市","geotable_id":185763,"modify_time":1521790336,"district":"虹口区","icon_style_id":"sid1","create_time":1521262974,"city":"上海市","location":[121.49408,31.257188],"address":"上海市虹口区海宁路252号","title":"高新技术","coord_type":3,"type":0,"distance":0,"weight":0},{"tags":"服装","price":36921,"area_size":12563,"uid":2430429552,"province":"上海市","geotable_id":185763,"modify_time":1521790309,"district":"黄浦区","icon_style_id":"sid1","create_time":1521466160,"city":"上海市","location":[121.481791,31.242678],"address":"上海市黄浦区云南北路22号","title":"港陆黄浦中心","coord_type":3,"type":0,"distance":0,"weight":0},{"tags":"IT","price":120153,"area_size":6936,"uid":2430429582,"province":"上海市","geotable_id":185763,"modify_time":1521790298,"district":"黄浦区","icon_style_id":"sid1","create_time":1521466167,"city":"上海市","location":[121.474173,31.238356],"address":"上海市黄浦区成都北路500","title":"新昌小区","coord_type":3,"type":0,"distance":0,"weight":0},{"area_size":2568,"tags":"测试","price":15523,"uid":2432746293,"province":"上海市","geotable_id":185763,"district":"闵行区","icon_style_id":"sid1","create_time":1522055204,"city":"上海市","location":[121.393829,31.110752],"address":"上海市闵行区珠城路","title":"莘城中央公园","coord_type":3,"type":0,"distance":0,"weight":0},{"area_size":2565,"tags":"test","price":32012,"uid":2432746440,"province":"上海市","geotable_id":185763,"district":"闵行区","icon_style_id":"sid1","create_time":1522055230,"city":"上海市","location":[121.402021,31.100178],"address":"上海市闵行区都市路4360号","title":"银都苑","coord_type":3,"type":0,"distance":0,"weight":0},{"area_size":2565,"tags":"test`","price":15265,"uid":2432746740,"province":"上海市","geotable_id":185763,"district":"闵行区","icon_style_id":"sid1","create_time":1522055288,"city":"上海市","location":[121.400611,31.166194],"address":"上海市闵行区莲花路1497号","title":"华一实业大厦","coord_type":3,"type":0,"distance":0,"weight":0}];
+                var json_data=[];
                 var baidu_map_fn={
-                    setCustomMap:function(){                //根据daboxId创建自定义图层，用户可用自己创建的geotableid替换30960  
-                        
-                        var customLayer=new BMap.CustomLayer({  
-                            geotableId: 185763,   
-                            q: '', //检索关键字  
-                            tags: '', //空格分隔的多字符串  
-                            filter: 'test' //过滤条件,参考http://lbsyun.baidu.com/index.php?title=lbscloud/api/geosearch  
-                        });
-                        map.addTileLayer(customLayer);//添加自定义图层
-                    },
-                    getAddressPoint:function(city_name,address_name,callback) {            //获取地址经纬度
+                    getAddressPoint:function(city_name,address_name,callback) {                     //获取地址经纬度
                         // 创建地址解析器实例
                         var myGeo = new BMap.Geocoder();
                         var self=this;
@@ -51,45 +58,17 @@
                             }
                         },city_name);
                     },
-                    setSearch:function(){
-                        var options = {
-                            renderOptions: {
-                                map: map
-                            },
-                            onSearchComplete: function(results) {
-                                var marker = new BMap.Marker(results.center);  // 创建标注
-                                map.addOverlay(marker);               // 将标注添加到地图中
-                                marker.setAnimation(BMAP_ANIMATION_BOUNCE); //跳动的动画
-                            }
-                        };
-                        var localSearch = new BMap.LocalSearch(map, options);                   //定义搜索
-                    },
-                    setPointSearch:function(search_name,point){
-                        var circle = new BMap.Circle(point, 5000, {
-                            fillColor: "blue",
-                            strokeWeight: 1,
-                            fillOpacity: 0.3,
-                            strokeOpacity: 0.3
-                        });     
-                        map.addOverlay(circle);
-                        localSearch.searchNearby(search_name,point, 5000, {
-                            customData: {
-                                geotableId: 185763
-                            }
-                        });
-                    },
-                    addMarker:function(obj){
+                    addMarker:function(obj){                                                          //添加marker
                         var self=this;
 
                         var lng=obj["location"][0],lat=obj["location"][1],title=obj["title"] || "",href=obj["href"] || "https://www.baidu.com";
                         var point=new BMap.Point(lng,lat);
                         var marker = new BMap.Marker(point);            // 创建标注
-                        self.addLabelInfo(marker,obj);
                         map.addOverlay(marker);                         // 将标注添加到地图中
                         
                         // marker.setAnimation(BMAP_ANIMATION_BOUNCE);     //跳动的动画
                     },
-                    getBoundary:function(region_name){                                //添加行政区域    
+                    getBoundary:function(region_name){                                                 //添加行政区域    
                         var bdary = new BMap.Boundary();
                         bdary.get(region_name,function(rs){         //获取行政区域
                             // map.clearOverlays();                    //清除地图覆盖物       
@@ -107,76 +86,97 @@
                             map.setViewport(pointArray);    //调整视野  
                         });   
                     },
-                    addTool:function(){                                  //添加地图控件功能
+                    addTool:function(){                                                                 //添加地图控件功能
                         map.enableScrollWheelZoom(true);     //开启鼠标滚轮缩放
                     },
-                    setMarkerData:function(data){                           //显示数据
+                    setMarkerData:function(data){                                                       //循环数据
                         var self=this;
-                        self.getAddressPoint("上海市","南苏州路777",self.setCircle);
                         for(var i=0,len=data.length;i<len;i++){
                             self.addMarker(data[i]);
                         }
                     },
-                    setCircle:function(point){
+                    setCircle:function(point){                                                          //生成原型对象
                         var circle = new BMap.Circle(point, 5000, {
                             fillColor: "blue",
                             strokeWeight: 1,
                             fillOpacity: 0.3,
                             strokeOpacity: 0.3
                         });
-                        map.addOverlay(circle);
+                        return circle;
                     },
-                    addLabelInfo:function(marker,obj){
-                        var title=obj.title || "";
-                        var area_size=obj.area_size || "";
-                        var price=obj.price || "";
-                        var href=obj.href || "https://www.baidu.com";
-                        var address=obj.address || "";
-                        var tel=obj.tel || "测试12019568956";
-                        var description=obj.description || "简介";
-                        var content = '<div style="margin:0;line-height:20px;padding:2px;">' +
-                                        '<img src="../img/baidu.jpg" alt="" style="float:right;zoom:1;overflow:hidden;width:100px;height:100px;margin-left:3px;"/>' +
-                                        '地址：'+address+'<br/>电话：'+tel+'<br/>简介：' +description+'<br/>'+
-                                        '面积：'+area_size+
-                                        '\&nbsp\&nbsp价格：'+price+'<br/>'+
-                                        '详情：<a href="'+href+'" title="查看官网" target="_blank">'+title+'</a>'
-                                        '</div>';
 
-                        //创建检索信息窗口对象
-                        var searchInfoWindow = null;
-                        searchInfoWindow = new BMap.InfoWindow(content, {
-                                title  : title,      //标题
-                                width  : 290,             //宽度
-                                height : 105,              //高度
-                                panel  : "panel",         //检索结果面板
-                                enableAutoPan : true,     //自动平移
-                                searchTypes   :[
-                                    BMAPLIB_TAB_SEARCH,   //周边检索
-                                    BMAPLIB_TAB_TO_HERE,  //到这里去
-                                    BMAPLIB_TAB_FROM_HERE //从这里出发
-                                ]
+                    getStyles:function(){                                                               //设置点聚合styles
+                        return [
+                            {
+                                url:"",
+                                size:new BMap.Size(30, 26),
+                                anchor:[16, 0],
+                                offset:new BMap.Size(30, -30),
+                                textSize:12,
+                                textColor:"#fff"
+                            },
+                            {
+                                url:"",
+                                size:new BMap.Size(30, 26),
+                                anchor:[16, 0],
+                                offset:new BMap.Size(30, -30),
+                                textSize:12,
+                                textColor:"#fff"
+                            }
+                        ]
+                    },
+                    setLabelMarker:function(data){                                                      //生成点聚合数据
+                        var self=this;
+                        var obj=null,lng=0,lat=0,title="",href="",price=0,area_size=0,district="",point=null,marker=null,markers=[];
+
+                        var htm = '';
+                        var label_marker=null,label_markers=[];
+                        for(var i=0,len=data.length;i<len;i++){
+                            obj=data[i];
+                            lng=obj["location"][0],lat=obj["location"][1],title=obj["title"] || "",href=obj["href"] || "https://www.baidu.com";
+                            price=obj["price"];
+                            area_size=obj["area_size"];
+                            district=obj["district"];
+                            point=new BMap.Point(lng,lat);
+                            htm='<div class="info-div">'+
+                            '<a href="'+href+'" title="查看详情" target="_blank">'+
+                            title+'<br/>'+
+                            '价格：'+price+'元/㎡<br/>'+
+                            '面积：'+area_size+'㎡<br/>'+
+                            '</a></div>';
+                            // 创建覆盖物
+                            marker=new BMap.Marker(point);            // 创建标注
+                            label_marker=new BMap.Label(htm,{
+                                position:point,
+                                offset:new BMap.Size(-60,0)
                             });
-                        marker.addEventListener("mouseover", function(e){
-                            console.log(e);
-                            map.openInfoWindow(searchInfoWindow)
-                        });
-                        marker.addEventListener("mouseout", function(e){
-                            searchInfoWindow.close(marker);
-                        });
+                            // 给label增加用户自定义字段
+                            label_marker.price=price;
+                            label_marker.area_size=area_size;
+                            label_marker.district=district;
+                            // map.addOverlay(marker);                              // 将标注添加到地图中
+                            map.addOverlay(label_marker);                           // 将标注添加到地图中
+                            label_markers.push(label_marker);                       //聚合数组
+                            // markers.push(marker);                                //聚合数组
+                            // marker.setAnimation(BMAP_ANIMATION_BOUNCE);          //跳动的动画
+                        }
                         
+                        def.markerClusterer = new BMapLib.MarkerClusterer(map,{markers:label_markers,styles:baidu_map_fn.getStyles(),"minClusterSize":2,"girdSize":100});
+                        map.centerAndZoom("上海",12);
+
                     }
                 };
+                
+                
+                baidu_map_fn.setLabelMarker(map_data);          //生成点聚合
+                
+                baidu_map_fn.addTool();                         //添加工具
 
-                baidu_map_fn.setMarkerData(json);
                 // baidu_map_fn.getBoundary("上海市黄浦区");
-                baidu_map_fn.addTool();
+                
                 // baidu_map_fn.getAddressPoint("上海市","都市路4633",function(point){
                 //     console.log(point)
                 // });
-
-
-
-                
                 
                 // $.ajax({
                 //     url:"http://api.map.baidu.com/geosearch/v3/local?region=上海&ak=BQtrC7t3SWOnelZPBWPMSSZi&sn=eWVVBCvTzigxo0eu4992ryaKm6GG0W0W&geotable_id=185763",
@@ -184,7 +184,8 @@
                 //     success:function(data){
                 //         console.log(data);
                 //     }
-                // })
+                // });
+                
             }(window);
         </script>
     </body>

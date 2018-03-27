@@ -893,7 +893,6 @@ var BMapLib = window.BMapLib = BMapLib || {};
     */
     TextIconOverlay.prototype._buildCssText = function(style) {    
         //根据style来确定一些默认值
-        console.log(style)
         var url = style['url'];
         var size = style['size'];
         var anchor = style['anchor'];
