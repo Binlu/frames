@@ -45,7 +45,9 @@
                     _top: 0,
                     _oring: 0,
                     scale: 1,
-                    now_oring: 0
+                    now_oring: 0,
+                    mx: 0,
+                    my: 0
                 }
             }
 
@@ -82,13 +84,9 @@
                 var ol = event.clientX - _tag.offsetLeft - parent_node.offsetLeft - tag_w;
                 var ot = event.clientY - _tag.offsetTop - parent_node.offsetTop - tag_h;
                 if( already_origin ){	// 以前有转动过
-                    var new_x = parent_obj._l*Math.cos(parent_obj.now_oring)*parent_obj.scale - parent_obj._w/2 - tag_w;
-                    var new_y = parent_obj._l*Math.sin(parent_obj.now_oring)*parent_obj.scale - parent_obj._h/2 - tag_h;
-
-                    ol = ol*1 + new_x; 
-                    ot = ot*1 - new_y; 
+                    ol = event.clientX - parent_obj._x - parent_obj.mx;
+                    ot = event.clientY - parent_obj._y - parent_obj.my;
                 }
-                ot = ol = 0;
                 already_origin = true;
                 //为document绑定一个onmousemove事件
                 document.onmousemove = function(event){		
@@ -97,11 +95,11 @@
                     }
                     
                     // 相对中心点位移
-                    var mx = event.clientX - ol - parent_obj._x;
-                    var my = event.clientY - ot - parent_obj._y;
+                    parent_obj.mx = event.clientX - ol - parent_obj._x;
+                    parent_obj.my = event.clientY - ot - parent_obj._y;
 
                     // 放大比例
-                    parent_obj.scale = (Math.sqrt(mx*mx+my*my))/parent_obj._l;
+                    parent_obj.scale = (Math.sqrt(parent_obj.mx*parent_obj.mx+parent_obj.my*parent_obj.my))/parent_obj._l;
                     
                     var n_w = parent_obj._w*parent_obj.scale;
                     var n_h = parent_obj._h*parent_obj.scale;
@@ -113,12 +111,10 @@
                     parent_node.style.top = parent_obj._top-n_t+'px';
                     
                     // 旋转角度
-                    var now_oring = (Math.atan2(my*-1,mx)/(Math.PI*2) -parent_obj._oring) *-360 ;
+                    var now_oring = (Math.atan2(parent_obj.my*-1,parent_obj.mx)/(Math.PI*2) -parent_obj._oring) *-360 ;
                     parent_node.style.transform = 'rotate('+now_oring+'deg)'; 
 
-                    parent_obj.now_oring = Math.atan2(my*-1,mx)/(Math.PI*2);
-                    console.log(mx)
-                    // console.log(parent_obj._oring)
+                    parent_obj.now_oring = Math.atan2(parent_obj.my*-1,parent_obj.mx)/(Math.PI*2);
                     
                     
                 };
