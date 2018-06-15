@@ -2,7 +2,21 @@
 	#author		lut000
 	#date 		2018/06/13
 */
-define([],function(){
+
+
+require.config({
+    paths:{
+        'rotate-origin':['origin-set']
+    },
+    shim:{
+        'rotate-origin':{
+            exports:'rotate_fn'
+        },
+    }
+});
+
+
+define(['rotate-origin'],function(rotate_fn){
 	
 	var fn={
 		container:null,
@@ -114,11 +128,27 @@ define([],function(){
 							deleteBox(event);
 						}
 						
+					}else if(tag.className.indexOf('js-origin-btn')!=-1){
+						if(type=='mousedown'){
+							rotateStart(event);
+						}else if(type=='mousemove' && origin_info.is_drag==true){
+							rotateMove(event);
+						}else if(type=='mouseup'){
+							dragUp(event);
+						}
+						
+					}else{
+						if(type=='mousemove' && origin_info.is_drag==true){
+							rotateMove(event);
+						}else if(type=='mouseup'){
+							dragUp(event);
+						}
 					}
 					
 				}else{
 					if(type=='mouseup'){
 						dragUp(event);
+
 					}else if(type=='click'){
 						self.def.can_operate=false;
 						if(self.def.now_tag!=null){
@@ -163,7 +193,6 @@ define([],function(){
             };
             //为document绑定一个onmousemove事件
             function dragMove(event){												//拖拽中
-
             	var tag=event.target;
             	var x=event.clientX - drag_info.rx;			
             	var y=event.clientY - drag_info.ry;			
@@ -172,7 +201,15 @@ define([],function(){
             };
                 
             function dragUp(event){													//结束拖拽
-            	drag_info.is_drag=false;
+            	if(drag_info.is_drag==true){
+            		drag_info.is_drag=false;
+            		
+            	}
+            	
+            	if(origin_info.is_drag==true){
+            		origin_info.is_drag=false;
+            		origin_info.box=null;
+            	}
             	if(self.def.now_tag!=null){
             		self.def.now_tag.classList.remove('drag-now');
             	}
@@ -183,7 +220,6 @@ define([],function(){
             	self.def.now_tag=null;
             	self.def.can_operate=false;
             	var id=tag.getAttribute('data-id');
-            	console.log(boxs.length)
             	boxs.forEach(function(item,index){
             		if(item.id==id){
             			boxs.splice(index,1);
@@ -193,8 +229,88 @@ define([],function(){
 
             	self.updateView();
             };
-               
+            
 
+
+            // 绑定旋转
+            var origin_info={
+            	is_drag:false,
+            	rx:0,
+            	ry:0,
+            	ox:0,										//中心点x坐标
+            	oy:0,										//中心点y坐标
+            	mx:0,
+            	my:0,
+            	scale:1,
+            	start_deg:0,
+            	box:null
+            };
+            function rotateStart(event){
+                var tag=event.target,par=tag.parentNode;
+                var box=self.getBox(par.getAttribute('data-id'));
+                if(self.def.can_operate==true){
+					origin_info.is_drag=true;
+					self.def.now_tag=par;
+					origin_info.rx = event.clientX - box.x-box.ow*box.scale;
+                	origin_info.ry = event.clientY - box.y-box.oh*box.scale;
+
+                	origin_info.ox = box.x+box.ow*box.scale/2;
+                	origin_info.oy = box.y+box.oh*box.scale/2;
+
+                	origin_info.start_deg=Math.atan2(box.oh*-1,box.ow);
+
+
+				}
+
+				origin_info.box=box;
+
+                
+                
+	        };
+            
+            function rotateMove(event){
+            	var box=origin_info.box;
+
+
+                // 相对中心点位移
+                origin_info.mx = event.clientX - origin_info.rx - origin_info.ox;
+                origin_info.my = event.clientY - origin_info.ry - origin_info.oy;
+
+                
+
+                // 放大比例
+                origin_info.nw = Math.abs(origin_info.mx*2);
+                origin_info.nh = Math.abs(origin_info.my*2);
+
+
+
+                origin_info.scale = Math.sqrt(Math.pow(origin_info.nw,2)+Math.pow(origin_info.nh,2))/Math.sqrt(Math.pow(box.ow,2)+Math.pow(box.oh,2));
+                // origin_info.scale = origin_info.nh/box.oh;
+                
+                //旋转角度
+                var now_roate = (Math.atan2(origin_info.my*-1,origin_info.mx) - origin_info.start_deg) * 180/Math.PI*-1;
+
+                var x=box.x-(box.ow*origin_info.scale-box.ow)/2;
+                var y=box.y-(box.oh*origin_info.scale-box.oh)/2;
+                // self.def.now_tag.style.width=origin_info.nw+'px';
+                // self.def.now_tag.style.height=origin_info.nh+'px';
+                // self.def.now_tag.style.left=x+'px';
+                // self.def.now_tag.style.top=y+'px';
+                self.updateView({
+                	x:x,
+                	y:y,
+                	scale:origin_info.scale,
+                	rotate:now_roate
+                });
+                
+                // parent_node.style.transform = 'rotate('+now_oring+'deg)'; 
+
+                // origin_info.now_oring = Math.atan2(origin_info.my*-1,origin_info.mx)/(Math.PI*2);
+            };
+
+            function rotateUp(event){
+            	console.log(origin_info);
+            };
 
 			// 绑定监听
 			window.addEventListener('resize',function(){
@@ -216,6 +332,21 @@ define([],function(){
 			},false);
 			img.src=src;
 		},
+		getBox:function(id){										//查询box
+			var boxs=this.data.boxs;
+			for(var i=0,len=boxs.length;i<len;i++){
+				if(id==boxs[i].id){
+					return this.cloneBox(boxs[i]);
+				}
+			}
+		},
+		cloneBox:function(box){										//克隆box
+			var o={};
+			for(var key in box){
+				o[key]=box[key];
+			}
+			return o;
+		},
 
 		setBox:function(id,img){									//创建一个新的框
 			var nindex=this.data.boxs.length;
@@ -234,9 +365,7 @@ define([],function(){
 				rotate:0,											//box的旋转角度（°）
 				scale:1,											//box当前的缩放比例
 			}
-			console.log(box);
 			// this.limitSize(box);
-			console.log(box);
 			this.setDiv(box);
 
 			return box;
@@ -282,8 +411,9 @@ define([],function(){
 
 			ediv.className='js-drag-box drag-box can-drag';
 			ediv.setAttribute('data-id',box.id);
-			ediv.style.cssText='z-index:'+box.zindex+';left:'+(box.x-this.def.border_width)+'px;top:'+(box.y-this.def.border_width)+'px;width:'+box.ow*box.scale+'px;height:'+box.oh*box.scale+'px;transfrom:rotateZ('+box.rotate+'deg)';
+			ediv.style.cssText='z-index:'+box.zindex+';left:'+(box.x-this.def.border_width)+'px;top:'+(box.y-this.def.border_width)+'px;width:'+box.ow*box.scale+'px;height:'+box.oh*box.scale+'px;transform:rotateZ('+box.rotate+'deg)';
 			ebutton.className='js-close-box';
+			espan.className='js-origin-btn';
 			ediv.appendChild(ebutton);
 			ediv.appendChild(espan);
 			this.container.appendChild(ediv);
@@ -327,12 +457,20 @@ define([],function(){
 		},
 
 		setView:function(item,tag){										//显示试图
+			
+			var x=item.x.toFixed(1),y=item.y.toFixed(1),nw=(item.ow*item.scale).toFixed(1),nh=(item.oh*item.scale).toFixed(1);
+
+			var ox=x+nw/2;
+			var oy=y+nh/2;
 			this.ctx.save();
-			var x=item.x,y=item.y,nw=item.ow*item.scale,nh=item.oh*item.scale;
-			this.ctx.drawImage(item.img,x,y,nw,nh);
+			this.ctx.translate(ox,oy);
+			this.ctx.rotate(item.rotate*Math.PI/180);
+			this.ctx.translate(-ox,-oy);
+
+			// this.ctx.drawImage(item.img,x,y,nw,nh);
 			this.ctx.restore();
 			if(tag){
-				tag.style.cssText='z-index:'+item.zindex+';left:'+(x-this.def.border_width)+'px;top:'+(y-this.def.border_width)+'px;width:'+nw+'px;height:'+nh+'px;transfrom:rotateZ('+item.rotate+'deg)';
+				tag.style.cssText='z-index:'+item.zindex+';left:'+(x-this.def.border_width)+'px;top:'+(y-this.def.border_width)+'px;width:'+nw+'px;height:'+nh+'px;transform:rotateZ('+item.rotate+'deg)';
 			}
 		}
 	};

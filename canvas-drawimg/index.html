@@ -15,11 +15,13 @@
 			    -ms-user-select: none;
 			    user-select: none;
             }
-            .drag-box{position: absolute;cursor: move;}
-            .drag-box>button{z-index: 10;position: absolute;left: -20px;top: -20px;display: inline-block;width: 20px;height: 20px;border-style: none;background-color: #f00;cursor: pointer;}
-            .drag-box>span{z-index: 10;position: absolute;right: -20px;bottom: -20px;display: inline-block;width: 20px;height: 20px;background-color: #00d;cursor: nw-resize}
+            .drag-box{position: absolute;cursor: move;background-color: #ff0}
+            .drag-box>button{z-index: 10;position: absolute;left: -20px;top: -20px;display: none;width: 20px;height: 20px;border-style: none;background-color: #f00;cursor: pointer;}
+            .drag-box>span{z-index: 10;position: absolute;right: -20px;bottom: -20px;display: none;width: 20px;height: 20px;background-color: #00d;cursor: nw-resize}
             .drag-now{z-index: 5000 !important}
             .can-drag{border:1px dotted #f00;}
+            .can-drag>button{display: inline-block;}
+            .can-drag>span{display: inline-block;}
             .recommend-list{z-index: 5555;position: absolute;left: 0px;bottom: 0px;}
             .recommend-list>li{width: 200px;float: left;cursor: pointer;}
             .recommend-list>li>img{width: 100%;}

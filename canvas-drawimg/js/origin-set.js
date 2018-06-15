@@ -1,9 +1,7 @@
+//使用 dragOrigin.originStart('js-origin-btn')
 
-(function(w){
-
-    //使用 dragOrigin.originStart('js-origin-icon')
-
-    w.dragObj = {
+define([],function(){
+    var dragObj = {
 
         def: {
 
@@ -40,7 +38,7 @@
                     _h: 0,
                     _x: 0,
                     _y: 0,
-                    _l: 0,		//斜对角半长
+                    _l: 0,      //斜对角半长
                     _left: 0,
                     _top: 0,
                     _oring: 0,
@@ -54,13 +52,12 @@
             
 
             obj.onmousedown = function(event){
-                
-                str = str || 'js-origin-icon';
+                str = str || 'js-origin-btn';
                 var _tag = event.target, parent_node = _tag.parentNode;
-                if(!_tag.classList.contains(str)){	// 是不是需要移动的元素
+                if(!_tag.classList.contains(str)){  // 是不是需要移动的元素
                     return;
                 }
-                
+                console.log(222)
                 // 初始化旋转数据
                 // 父元素中心点的位置
                 if( !already_origin ){
@@ -83,13 +80,13 @@
                 var tag_h = parseFloat(_this.getStyle(_tag, 'height'))/2;
                 var ol = event.clientX - _tag.offsetLeft - parent_node.offsetLeft - tag_w;
                 var ot = event.clientY - _tag.offsetTop - parent_node.offsetTop - tag_h;
-                if( already_origin ){	// 以前有转动过
+                if( already_origin ){   // 以前有转动过
                     ol = event.clientX - parent_obj._x - parent_obj.mx;
                     ot = event.clientY - parent_obj._y - parent_obj.my;
                 }
                 already_origin = true;
                 //为document绑定一个onmousemove事件
-                document.onmousemove = function(event){		
+                document.onmousemove = function(event){     
                     if(event.clientX > document.documentElement.clientWidth||event.clientY > document.documentElement.clientHeight){
                         return;
                     }
@@ -131,10 +128,9 @@
             };
         },
     
-    }
+    };
 
-
-})(this)
-
+    return dragObj;
+});
 
 
