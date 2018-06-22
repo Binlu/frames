@@ -121,6 +121,8 @@ define(['rotate-origin'],function(rotate_fn){
 							dragMove(event);
 						}else if(type=='mouseup'){
 							dragUp(event);
+						}else if(type=='mousemove' && origin_info.is_drag==true){
+							rotateMove(event);
 						}
 					}else if(tag.className.indexOf('js-close-box')!=-1){
 						// 删除框事件
@@ -139,6 +141,7 @@ define(['rotate-origin'],function(rotate_fn){
 						
 					}else{
 						if(type=='mousemove' && origin_info.is_drag==true){
+
 							rotateMove(event);
 						}else if(type=='mouseup'){
 							dragUp(event);
@@ -201,6 +204,8 @@ define(['rotate-origin'],function(rotate_fn){
             };
                 
             function dragUp(event){													//结束拖拽
+
+
             	if(drag_info.is_drag==true){
             		drag_info.is_drag=false;
             		
@@ -211,7 +216,8 @@ define(['rotate-origin'],function(rotate_fn){
             		origin_info.box=null;
             	}
             	if(self.def.now_tag!=null){
-            		self.def.now_tag.classList.remove('drag-now');
+            		self.def.now_tag.classList.remove('drag-now','can-drag');
+            		self.def.now_tag=null;
             	}
             };
 
@@ -243,7 +249,10 @@ define(['rotate-origin'],function(rotate_fn){
             	my:0,
             	scale:1,
             	start_deg:0,
-            	box:null
+            	abs_deg:0,
+            	box:null,
+
+            	rk:Math.PI/180
             };
             function rotateStart(event){
                 var tag=event.target,par=tag.parentNode;
@@ -251,51 +260,47 @@ define(['rotate-origin'],function(rotate_fn){
                 if(self.def.can_operate==true){
 					origin_info.is_drag=true;
 					self.def.now_tag=par;
-					origin_info.rx = event.clientX - box.x-box.ow*box.scale;
-                	origin_info.ry = event.clientY - box.y-box.oh*box.scale;
-
+					// 中心点坐标
                 	origin_info.ox = box.x+box.ow*box.scale/2;
                 	origin_info.oy = box.y+box.oh*box.scale/2;
 
+                	if(box.mx!=undefined){
+						origin_info.rx = event.clientX-box.mx-origin_info.ox;
+						origin_info.ry = event.clientY-box.my-origin_info.oy;
+					}else{
+						origin_info.rx = event.clientX - (box.x+box.ow*box.scale);
+						origin_info.ry = event.clientY - (box.y+box.oh*box.scale);
+					}
+
                 	origin_info.start_deg=Math.atan2(box.oh*-1,box.ow);
-
-
 				}
 
 				origin_info.box=box;
-
                 
                 
 	        };
             
             function rotateMove(event){
             	var box=origin_info.box;
-
-
-                // 相对中心点位移
+                // // 相对中心点位移
                 origin_info.mx = event.clientX - origin_info.rx - origin_info.ox;
                 origin_info.my = event.clientY - origin_info.ry - origin_info.oy;
 
-                
-
                 // 放大比例
-                origin_info.nw = Math.abs(origin_info.mx*2);
-                origin_info.nh = Math.abs(origin_info.my*2);
-
-
-
-                origin_info.scale = Math.sqrt(Math.pow(origin_info.nw,2)+Math.pow(origin_info.nh,2))/Math.sqrt(Math.pow(box.ow,2)+Math.pow(box.oh,2));
-                // origin_info.scale = origin_info.nh/box.oh;
-                
+                origin_info.scale = Math.sqrt(Math.pow(origin_info.mx*2,2)+Math.pow(origin_info.my*2,2))/Math.sqrt(Math.pow(box.ow,2)+Math.pow(box.oh,2));
                 //旋转角度
-                var now_roate = (Math.atan2(origin_info.my*-1,origin_info.mx) - origin_info.start_deg) * 180/Math.PI*-1;
+                var Q=Math.atan2(origin_info.my*-1,origin_info.mx);
+                var now_roate = (Q - origin_info.start_deg) * 180/Math.PI*-1;
 
-                var x=box.x-(box.ow*origin_info.scale-box.ow)/2;
-                var y=box.y-(box.oh*origin_info.scale-box.oh)/2;
-                // self.def.now_tag.style.width=origin_info.nw+'px';
-                // self.def.now_tag.style.height=origin_info.nh+'px';
-                // self.def.now_tag.style.left=x+'px';
-                // self.def.now_tag.style.top=y+'px';
+                // 计算新的x,y
+                var x=origin_info.ox-box.ow*origin_info.scale/2;
+                var y=origin_info.oy-box.oh*origin_info.scale/2;
+
+                // 记录相对于中心点位移
+                box.mx=origin_info.mx;
+                box.my=origin_info.my;
+
+                // 更新数据
                 self.updateView({
                 	x:x,
                 	y:y,
@@ -303,9 +308,6 @@ define(['rotate-origin'],function(rotate_fn){
                 	rotate:now_roate
                 });
                 
-                // parent_node.style.transform = 'rotate('+now_oring+'deg)'; 
-
-                // origin_info.now_oring = Math.atan2(origin_info.my*-1,origin_info.mx)/(Math.PI*2);
             };
 
             function rotateUp(event){
@@ -336,7 +338,7 @@ define(['rotate-origin'],function(rotate_fn){
 			var boxs=this.data.boxs;
 			for(var i=0,len=boxs.length;i<len;i++){
 				if(id==boxs[i].id){
-					return this.cloneBox(boxs[i]);
+					return boxs[i];
 				}
 			}
 		},
@@ -458,16 +460,17 @@ define(['rotate-origin'],function(rotate_fn){
 
 		setView:function(item,tag){										//显示试图
 			
-			var x=item.x.toFixed(1),y=item.y.toFixed(1),nw=(item.ow*item.scale).toFixed(1),nh=(item.oh*item.scale).toFixed(1);
-
+			var x=item.x.toFixed(1)*1,y=item.y.toFixed(1)*1,nw=(item.ow*item.scale).toFixed(1)*1,nh=(item.oh*item.scale).toFixed(1)*1;
 			var ox=x+nw/2;
 			var oy=y+nh/2;
 			this.ctx.save();
 			this.ctx.translate(ox,oy);
+
 			this.ctx.rotate(item.rotate*Math.PI/180);
+
 			this.ctx.translate(-ox,-oy);
 
-			// this.ctx.drawImage(item.img,x,y,nw,nh);
+			this.ctx.drawImage(item.img,x,y,nw,nh);
 			this.ctx.restore();
 			if(tag){
 				tag.style.cssText='z-index:'+item.zindex+';left:'+(x-this.def.border_width)+'px;top:'+(y-this.def.border_width)+'px;width:'+nw+'px;height:'+nh+'px;transform:rotateZ('+item.rotate+'deg)';
