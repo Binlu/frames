@@ -27,6 +27,8 @@ define(['rotate-origin'],function(rotate_fn){
 			oh:0,
 			border_width:1,										//box边框宽度
 			limit_number:10,									//限制boxs的个数
+			min_scale:0.2,										//最小缩放比例
+			max_scale:2.5,										//最大缩放比例
 			drag_index:1000,									//拖拽时图案的z-index
 
 			now_tag:null,										//当前拖拽对象
@@ -74,7 +76,7 @@ define(['rotate-origin'],function(rotate_fn){
 
 		bindFunc:function(){									//绑定事件
 
-			var self=this,boxs=self.data.boxs;
+			var self=this,boxs=self.data.boxs,d=self.def;
 			var list=document.querySelector('.js-recommend-list');
 			var container=this.container;
 
@@ -99,69 +101,74 @@ define(['rotate-origin'],function(rotate_fn){
 			};
 
 			// 选择要操作的框
-			container.addEventListener('click',methodCheck,false);
+			container.addEventListener('click',methodCheckClick,false);
 			// 开始拖拽
-			container.addEventListener('mousedown',methodCheck,false);
+			container.addEventListener('mousedown',methodCheckDown,false);
 			// 拖拽中
-			container.addEventListener('mousemove',methodCheck,false);
-			container.addEventListener('mouseup',methodCheck,false);
+			container.addEventListener('mousemove',methodCheckMove,false);
+			container.addEventListener('mouseup',methodCheckUp,false);
 
-
-			function methodCheck(event){													//事件分发
+			function methodCheckClick(event){												//点击事件
 				var tag=event.target;
-				var type=event.type;
 				if(tag.className!=undefined){
+					// 有class点击对象
 					if(tag.className.indexOf('js-drag-box')!=-1){
-						// 框的事件
-						if(type=='click'){
-							setNowTag(event);
-						}else if(type=='mousedown'){
-							dragDown(event);	
-						}else if(type=='mousemove' && drag_info.is_drag==true){
-							dragMove(event);
-						}else if(type=='mouseup'){
-							dragUp(event);
-						}else if(type=='mousemove' && origin_info.is_drag==true){
-							rotateMove(event);
-						}
+						setNowTag(event);
 					}else if(tag.className.indexOf('js-close-box')!=-1){
-						// 删除框事件
-						if(type=='click'){
-							deleteBox(event);
-						}
-						
+						deleteBox(event);
 					}else if(tag.className.indexOf('js-origin-btn')!=-1){
-						if(type=='mousedown'){
-							rotateStart(event);
-						}else if(type=='mousemove' && origin_info.is_drag==true){
-							rotateMove(event);
-						}else if(type=='mouseup'){
-							dragUp(event);
-						}
 						
 					}else{
-						if(type=='mousemove' && origin_info.is_drag==true){
-
-							rotateMove(event);
-						}else if(type=='mouseup'){
-							dragUp(event);
-						}
+						resetStatus(event);
 					}
-					
 				}else{
-					if(type=='mouseup'){
-						dragUp(event);
-
-					}else if(type=='click'){
-						self.def.can_operate=false;
-						if(self.def.now_tag!=null){
-							self.def.now_tag.classList.remove('can-drag');
-							self.def.now_tag=null;
-						}
-					}
+					// 无class点击对象
 				}
+			};
+			function methodCheckDown(event){												//鼠标按下
+				var tag=event.target;
+				if(tag.className!=undefined){
+					// 有class点击对象
+					if(tag.className.indexOf('js-drag-box')!=-1){
+						dragDown(event);
+					}else if(tag.className.indexOf('js-close-box')!=-1){
+						
+					}else if(tag.className.indexOf('js-origin-btn')!=-1){
+						rotateStart(event);
+					}else{
+						
+					}
+				}else{
+					// 无class点击对象
+				}
+			};
+			function methodCheckMove(event){												//鼠标移动
+				var tag=event.target;
+				if(drag_info.is_drag==true){
+					if(tag.className!=undefined && tag.className.indexOf('js-drag-box')!=-1){
+						dragMove(event);
+					}
+				}else if(origin_info.is_drag==true){
+					rotateMove(event);
+				}
+			};
 
-				
+			function methodCheckUp(event){													//鼠标放开
+				if(drag_info.is_drag==true){
+            		drag_info.is_drag=false;
+            	}
+            	if(origin_info.is_drag==true){
+            		origin_info.is_drag=false;
+            		origin_info.box=null;
+            	}
+			};
+			function resetStatus(event){													//更新操作对象
+
+				if(d.now_tag!=null){
+            		d.now_tag.classList.remove('drag-now','can-drag');
+            		d.now_tag=null;
+            	}
+
 			};
 
 
@@ -175,20 +182,20 @@ define(['rotate-origin'],function(rotate_fn){
                 	}
                 });
                 tag.classList.add('can-drag');
-                self.def.now_tag=tag;
-                self.def.can_operate=true;
+                d.now_tag=tag;
+                d.can_operate=true;
             };
             function dragDown(event){												//开始拖拽
                 var tag=event.target;
 
-                if(tag!=self.def.now_tag){
+                if(tag!=d.now_tag){
                 	return;
                 }
 
 				tag.classList.add('drag-now');       
-				if(self.def.can_operate==true){
+				if(d.can_operate==true){
 					drag_info.is_drag=true;
-					self.def.now_tag=tag;
+					d.now_tag=tag;
 					drag_info.rx = event.clientX - tag.offsetLeft;
                 	drag_info.ry = event.clientY - tag.offsetTop;
 				}      
@@ -203,28 +210,11 @@ define(['rotate-origin'],function(rotate_fn){
                 self.updateView({x:x,y:y});
             };
                 
-            function dragUp(event){													//结束拖拽
-
-
-            	if(drag_info.is_drag==true){
-            		drag_info.is_drag=false;
-            		
-            	}
-            	
-            	if(origin_info.is_drag==true){
-            		origin_info.is_drag=false;
-            		origin_info.box=null;
-            	}
-            	if(self.def.now_tag!=null){
-            		self.def.now_tag.classList.remove('drag-now','can-drag');
-            		self.def.now_tag=null;
-            	}
-            };
 
             function deleteBox(event){												//删除框
             	var tag=event.target.parentNode;
-            	self.def.now_tag=null;
-            	self.def.can_operate=false;
+            	d.now_tag=null;
+            	d.can_operate=false;
             	var id=tag.getAttribute('data-id');
             	boxs.forEach(function(item,index){
             		if(item.id==id){
@@ -249,17 +239,19 @@ define(['rotate-origin'],function(rotate_fn){
             	my:0,
             	scale:1,
             	start_deg:0,
+            	diagonal:0,									//对角线长度
+            	k:0,										//k=box.oh/box.ow
             	abs_deg:0,
             	box:null,
 
             	rk:Math.PI/180
             };
-            function rotateStart(event){
+            function rotateStart(event){															//开始旋转
                 var tag=event.target,par=tag.parentNode;
                 var box=self.getBox(par.getAttribute('data-id'));
-                if(self.def.can_operate==true){
+                if(d.can_operate==true){
 					origin_info.is_drag=true;
-					self.def.now_tag=par;
+					d.now_tag=par;
 					// 中心点坐标
                 	origin_info.ox = box.x+box.ow*box.scale/2;
                 	origin_info.oy = box.y+box.oh*box.scale/2;
@@ -273,6 +265,9 @@ define(['rotate-origin'],function(rotate_fn){
 					}
 
                 	origin_info.start_deg=Math.atan2(box.oh*-1,box.ow);
+
+                	origin_info.diagonal=Math.sqrt(Math.pow(box.ow,2)+Math.pow(box.oh,2));
+                	origin_info.k=box.oh/box.ow;
 				}
 
 				origin_info.box=box;
@@ -280,14 +275,22 @@ define(['rotate-origin'],function(rotate_fn){
                 
 	        };
             
-            function rotateMove(event){
-            	var box=origin_info.box;
+            function rotateMove(event){															//选择监听
+            	var box=origin_info.box,pnx=1,pny=1;
                 // // 相对中心点位移
                 origin_info.mx = event.clientX - origin_info.rx - origin_info.ox;
                 origin_info.my = event.clientY - origin_info.ry - origin_info.oy;
-
+                pnx=origin_info.mx>0?1:-1;
+                pny=origin_info.my>0?1:-1;
                 // 放大比例
-                origin_info.scale = Math.sqrt(Math.pow(origin_info.mx*2,2)+Math.pow(origin_info.my*2,2))/Math.sqrt(Math.pow(box.ow,2)+Math.pow(box.oh,2));
+                origin_info.scale = Math.sqrt(Math.pow(origin_info.mx*2,2)+Math.pow(origin_info.my*2,2))/origin_info.diagonal;
+
+                // 限制变换大小
+                if(origin_info.scale>d.max_scale || origin_info.scale<d.min_scale){
+                	origin_info.scale=origin_info.scale>d.max_scale?d.max_scale:d.min_scale;
+                	return;
+                }
+
                 //旋转角度
                 var Q=Math.atan2(origin_info.my*-1,origin_info.mx);
                 var now_roate = (Q - origin_info.start_deg) * 180/Math.PI*-1;
@@ -310,9 +313,7 @@ define(['rotate-origin'],function(rotate_fn){
                 
             };
 
-            function rotateUp(event){
-            	console.log(origin_info);
-            };
+
 
 			// 绑定监听
 			window.addEventListener('resize',function(){
@@ -322,8 +323,8 @@ define(['rotate-origin'],function(rotate_fn){
 		},
 
 		addBox:function(id,src){									//新增图案
-			var self=this;
-			if(self.data.boxs.length>self.def.limit_number){return;}
+			var self=this,d=self.def;
+			if(self.data.boxs.length>d.limit_number){return;}
 			var img=new Image(),nbox=null;
 			img.addEventListener('load',function(){
 				nbox=self.setBox(id,img);
@@ -431,7 +432,7 @@ define(['rotate-origin'],function(rotate_fn){
 		},
 
 		draw:function(opt){											//画图
-			var self=this;
+			var self=this,d=self.def;
 			this.drawLine();
 			var boxs=this.data.boxs;
 			var ow=this.def.ow;
@@ -439,14 +440,14 @@ define(['rotate-origin'],function(rotate_fn){
 			this.ctx.clearRect(0,0,ow,oh);
 
 
-			if(self.def.now_tag!=null){
-				var id=self.def.now_tag.getAttribute('data-id') || '';
+			if(d.now_tag!=null){
+				var id=d.now_tag.getAttribute('data-id') || '';
 				boxs.forEach(function(item){
 					if(id==item.id){
 						for(var key in opt){
 							item[key]=opt[key];
 						}
-						self.setView(item,self.def.now_tag);
+						self.setView(item,d.now_tag);
 					}else{
 						self.setView(item);
 					}
