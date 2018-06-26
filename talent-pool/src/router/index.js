@@ -1,8 +1,12 @@
 import Vue from 'vue'
 import Router from 'vue-router'
+
+
 import home from '@/pages/home'
-import list from '@/pages/list'
+// import list from '@/pages/list'
+const list = () => import('@/pages/list')
 import detail from '@/pages/detail'
+
 
 Vue.use(Router)
 
