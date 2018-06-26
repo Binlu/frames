@@ -1,0 +1,109 @@
+{
+    "lists": [
+        {
+            "scholl": "东南大学",
+            "description": "425425",
+            "img": "https://fuss10.elemecdn.com/8/40/02872ce8aefe75c16d3190e75ad61jpeg.jpeg",
+            "ratings": [
+                {
+                    "age": 23,
+                    "name": "xxx",
+                    "major": "教育1",
+                    "scholl":"东南大学",
+                    "pic": "https://fuss10.elemecdn.com/a/c4/5a78f477fd616a51ce33586a76ddbjpeg.jpeg"
+                },
+                {
+                    "age": 23,
+                    "name": "xxx",
+                    "major": "教育2",
+                    "scholl":"东南大学1",
+                    "pic": "https://fuss10.elemecdn.com/3/f2/2a8796ba025a5773fd685a95ac369jpeg.jpeg"
+                },
+                {
+                    "age": 23,
+                    "name": "xxx",
+                    "major": "企划",
+                    "scholl":"东南大学2",
+                    "pic": "https://fuss10.elemecdn.com/a/c4/5a78f477fd616a51ce33586a76ddbjpeg.jpeg"
+                },
+                {
+                    "age": 23,
+                    "name": "xxx",
+                    "major": "企划2",
+                    "scholl":"东南大学3",
+                    "pic": "https://fuss10.elemecdn.com/6/82/2cd3d681f5e93292b3eb49d6b412ajpeg.jpeg"
+                },
+                {
+                    "age": 23,
+                    "name": "xxx",
+                    "major": "企划3",
+                    "scholl":"东南大学4",
+                    "pic": "https://fuss10.elemecdn.com/f/7f/d1422ec824a0a9d1fb879c57ab533jpeg.jpeg"
+                },
+                {
+                    "age": 23,
+                    "name": "xxx",
+                    "major": "教育1",
+                    "scholl":"东南大学5",
+                    "pic": "https://fuss10.elemecdn.com/a/c4/5a78f477fd616a51ce33586a76ddbjpeg.jpeg"
+                },
+                {
+                    "age": 23,
+                    "name": "xxx",
+                    "major": "教育2",
+                    "scholl":"东南大学",
+                    "pic": "https://fuss10.elemecdn.com/3/f2/2a8796ba025a5773fd685a95ac369jpeg.jpeg"
+                },
+                {
+                    "age": 23,
+                    "name": "xxx",
+                    "major": "企划",
+                    "scholl":"东南大学6",
+                    "pic": "https://fuss10.elemecdn.com/a/c4/5a78f477fd616a51ce33586a76ddbjpeg.jpeg"
+                }
+            ]
+        },
+        {
+            "scholl": "华东大学",
+            "description": "425425",
+            "img": "https://fuss10.elemecdn.com/8/40/02872ce8aefe75c16d3190e75ad61jpeg.jpeg",
+            "ratings": [
+                {
+                    "age": 23,
+                    "name": "xxx",
+                    "major": "教育1",
+                    "scholl":"华东大学1",
+                    "pic": "https://fuss10.elemecdn.com/a/c4/5a78f477fd616a51ce33586a76ddbjpeg.jpeg"
+                },
+                {
+                    "age": 23,
+                    "name": "xxx",
+                    "major": "教育2",
+                    "scholl":"华东大学2",
+                    "pic": "https://fuss10.elemecdn.com/3/f2/2a8796ba025a5773fd685a95ac369jpeg.jpeg"
+                },
+                {
+                    "age": 23,
+                    "name": "xxx",
+                    "major": "企划",
+                    "scholl":"华东大学3",
+                    "pic": "https://fuss10.elemecdn.com/a/c4/5a78f477fd616a51ce33586a76ddbjpeg.jpeg"
+                },
+                {
+                    "age": 23,
+                    "name": "xxx",
+                    "major": "企划2",
+                    "scholl":"华东大学4",
+                    "pic": "https://fuss10.elemecdn.com/6/82/2cd3d681f5e93292b3eb49d6b412ajpeg.jpeg"
+                },
+                {
+                    "age": 23,
+                    "name": "xxx",
+                    "major": "企划3",
+                    "scholl":"华东大学5",
+                    "pic": "https://fuss10.elemecdn.com/f/7f/d1422ec824a0a9d1fb879c57ab533jpeg.jpeg"
+                }
+            ]
+        }
+    ]
+}
