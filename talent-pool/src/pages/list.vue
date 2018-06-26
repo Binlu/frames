@@ -2,7 +2,8 @@
     <div class="list-section">
     	<h1>极地-人才库</h1>
         <div class="search">
-            <input @keydown.13="listSearch" type="text" v-model="words" placeholder="请按照学校，专业 搜索人才"><span @click="listSearch">搜索</span>
+            <input @keydown.13="listSearch" v-model="words" type="text" class="form-control" id="exampleInputPassword1" placeholder="请按照学校，专业 搜索人才">
+            <button @click="listSearch" class="btn btn-primary" type="button">搜索</button>
         </div>
     	<div class="content" v-if="allLists.length">
             <ul >
@@ -89,7 +90,7 @@
     .content>ul>li>p{padding: 10px 10px 0;}
 
     .search{display: flex;justify-content: flex-end;}
-    .search>input{width: 200px;height: 30px;line-height: 30px;padding: 0 10px;}
+    .search>input{width: 260px;height: 38px;line-height: 38px;padding: 0 10px;}
     .search>span{width: 46px;height: 30px;background: rgb(20, 70, 236);display: block;line-height: 30px;color: #fff;text-align: center;cursor: pointer;}
 
 </style>
