@@ -11,16 +11,25 @@ export default new Router({
         {
           	path: '/',
           	name: 'home',
+            meta:{
+                title:'首页'
+            },
           	component: home
         },
         {
         	path:'/list',
             name:'list',
+            meta:{
+                title:'列表'
+            },
         	component:list
         },
         {
             path:'/detail',
             name:'detail',
+            meta:{
+                title:'详情'
+            },
             component:detail
         }
     ]
