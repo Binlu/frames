@@ -4,7 +4,7 @@
         <div class="content container">
             <div class="row">
                 <div class="col-md-12">
-                    <h3>当前位置：<position-ele :position="position"></position-ele></h3>
+                    <position-ele :position="position"></position-ele>
                 </div>
             </div>
             <router-view></router-view>
@@ -23,7 +23,7 @@ export default {
         'footer-template':footer,
         'position-ele':{
             props:['position'],
-            template:'<div><a v-for="item in position.links" :href="item.href">{{item.name}}></a><span>{{position.now_name}}</span></div>'
+            template:'<h3>当前位置：<a v-for="item in position.links" :href="item.href">{{item.name}}></a><span>{{position.now_name}}</span></h3>'
         }
     },
 

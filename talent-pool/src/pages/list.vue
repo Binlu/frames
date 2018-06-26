@@ -1,6 +1,5 @@
 <template>
     <div class="list-section">
-    	<h1>极地-人才库</h1>
         <div class="search">
             <input @keydown.13="listSearch" v-model="words" type="text" class="form-control" id="exampleInputPassword1" placeholder="请按照学校，专业 搜索人才">
             <button @click="listSearch" class="btn btn-primary" type="button">搜索</button>
