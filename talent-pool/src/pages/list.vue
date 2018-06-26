@@ -90,6 +90,6 @@
 
     .search{display: flex;justify-content: flex-end;}
     .search>input{width: 200px;height: 30px;line-height: 30px;padding: 0 10px;}
-    .search>span{width: 46px;height: 34px;background: rgb(20, 70, 236);display: block;line-height: 34px;color: #fff;text-align: center;cursor: pointer;}
+    .search>span{width: 46px;height: 30px;background: rgb(20, 70, 236);display: block;line-height: 30px;color: #fff;text-align: center;cursor: pointer;}
 
 </style>

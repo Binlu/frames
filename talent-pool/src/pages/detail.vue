@@ -1,20 +1,19 @@
 <template>
     <div>
-    	<h1>极地-人才库</h1>
-
-    	<p>{{msg}}</p>
-
-
-    	<router-link to='/list'>立即进入》</router-link>
+    	
     </div>
 </template>
 
 <script>
+    import {mapState} from 'vuex'
     export default {
-        name: 'home',
+        name: 'detail',
         data () {
             return{msg: '欢迎来的极地人才库'}
-        }
+        },
+        computed: {
+            ...mapState(['listMsg']),
+        },
     }
 </script>
 
