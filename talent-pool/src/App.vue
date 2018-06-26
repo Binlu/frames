@@ -4,7 +4,7 @@
         <div class="content container">
             <div class="row">
                 <div class="col-md-12">
-                    <h3>当前位置：{{position}}</h3>
+                    <h3>当前位置：<position-ele :position="position"></position-ele></h3>
                 </div>
             </div>
             <router-view></router-view>
@@ -21,15 +21,31 @@ export default {
     components: { 
        'header-template':header,
         'footer-template':footer,
+        'position-ele':{
+            props:['position'],
+            template:'<div><a v-for="item in position.links" :href="item.href">{{item.name}}></a><span>{{position.now_name}}</span></div>'
+        }
     },
 
     data(){
         return {
-            position:'',
+            position:{
+                links:[],
+                now_name:''
+            },
         }
     },
     mounted:function(){
-        this.position=this.$route.meta.title;
+        this.getStatus()
+    },
+    methods:{
+        getStatus:function(){
+            this.position.links=this.$route.meta.links;
+            this.position.now_name=this.$route.meta.title;
+        }
+    },
+    updated:function(){
+        this.getStatus();
     }
 }
 </script>

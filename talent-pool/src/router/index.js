@@ -20,6 +20,10 @@ export default new Router({
         	path:'/list',
             name:'list',
             meta:{
+                links:[{
+                    name:'首页',
+                    href:'/',
+                }],
                 title:'列表'
             },
         	component:list
@@ -28,6 +32,14 @@ export default new Router({
             path:'/detail',
             name:'detail',
             meta:{
+                links:[{
+                    name:'首页',
+                    href:'/',
+                },
+                {
+                    name:'列表',
+                    href:'/list',
+                }],
                 title:'详情'
             },
             component:detail
