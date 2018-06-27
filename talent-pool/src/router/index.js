@@ -6,6 +6,7 @@ import home from '@/pages/home'
 // import list from '@/pages/list'
 const list = () => import('@/pages/list')
 import detail from '@/pages/detail'
+import add from '@/pages/add'
 
 
 Vue.use(Router)
@@ -47,6 +48,22 @@ export default new Router({
                 title:'详情'
             },
             component:detail
+        },
+        {
+            path:'/add/',
+            name:'add',
+            meta:{
+                links:[{
+                    name:'首页',
+                    href:'/',
+                },
+                {
+                    name:'列表',
+                    href:'#/list',
+                }],
+                title:'新增'
+            },
+            component:add
         }
     ]
 })
