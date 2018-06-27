@@ -33,7 +33,7 @@
             return{
                 words: '',
                 searchWord: '',
-                nullShow: false
+                isSearch: false
             }
         },
         computed: {
@@ -49,18 +49,23 @@
                     }
                 })
                 return arr;
+            },
+            nullShow(){
+                const {isSearch, searchList} = this;
+                return (isSearch==true && searchList.length<=0)
             }
         },
-        watch: {
-            searchList(newVal){
-                this.nullShow = newVal.length<=0;
-            }
-        },
+        // watch: {
+        //     searchList(newVal){
+        //         this.nullShow = newVal.length<=0;
+        //     }
+        // },
         methods: {
             ...mapActions(['getLists']),
             listSearch(){
                 const {words} = this;
-                this.searchWord = words.trim()
+                this.searchWord = words.trim();
+                this.searchWord && (this.isSearch=true)
             }
         },
         created() {
