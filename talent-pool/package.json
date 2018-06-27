@@ -14,6 +14,7 @@
   "dependencies": {
     "bootstrap": "^4.1.1",
     "jquery": "^3.3.1",
+    "layui-src": "^2.3.0",
     "popper.js": "^1.14.3",
     "vue": "^2.5.2",
     "vue-router": "^3.0.1",

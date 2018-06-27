@@ -26,7 +26,7 @@
 
 <script>
     import {mapState, mapGetters, mapActions} from 'vuex'
-    
+    import layUi from 'layui-src/dist/layui.all'
     export default {
         name: 'home',
         data () {
