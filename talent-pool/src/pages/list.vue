@@ -7,12 +7,14 @@
     	<div class="content" v-if="allLists.length">
             <ul >
                 <li v-for="(item, n) in searchList" :key="n">
-                    <img :src="item.pic" alt="">
-                    <p>
-                        <span>学校： </span> {{item.scholl}}<br/>
-                        <span>年龄： </span> {{item.age+'岁'}}<br/>
-                        <span>专业： </span> {{item.major}}
-                    </p>
+                    <router-link :to="'/detail/'+item.id">
+                        <img :src="item.pic" alt="">
+                        <p>
+                            <span>学校： </span> {{item.scholl}}<br/>
+                            <span>年龄： </span> {{item.age+'岁'}}<br/>
+                            <span>专业： </span> {{item.major}}
+                        </p>
+                    </router-link>
                 </li>
             </ul>
         </div>
@@ -85,8 +87,8 @@
         flex: 0 1 200px;
         width: 200px;height: 260px;
     }
-    .content>ul>li>img{width: 100%;height: 140px;}
-    .content>ul>li>p{padding: 10px 10px 0;}
+    .content>ul>li img{width: 100%;height: 140px;}
+    .content>ul>li p{padding: 10px 10px 0;}
 
     .search{display: flex;justify-content: flex-end;}
     .search>input{width: 260px;height: 38px;line-height: 38px;padding: 0 10px;}
