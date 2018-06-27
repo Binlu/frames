@@ -42,7 +42,7 @@ export default new Router({
                 },
                 {
                     name:'列表',
-                    href:'/list',
+                    href:'#/list',
                 }],
                 title:'详情'
             },
