@@ -60,6 +60,7 @@
                 const arr = this.allLists.filter(obj => {
                     return !searchWord || (obj.major.indexOf(searchWord) !==-1 || obj.scholl.indexOf(searchWord) !==-1 )
                 })
+                this.pageIndex=0;   //变化后从第一页渲染
                 return arr;
             },
             nullShow(){     //列表筛选的变化了更新搜索结果状态和 分页状态
