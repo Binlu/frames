@@ -7,7 +7,7 @@
             "ratings": [
                 {
                     "id": 1,
-                    "age": 21,
+                    "years": 1,
                     "name": "xxx",
                     "major": "教育1",
                     "scholl":"东南大学",
@@ -15,7 +15,7 @@
                 },
                 {
                     "id": 2,
-                    "age": 22,
+                    "years": 2,
                     "name": "xxx",
                     "major": "教育2",
                     "scholl":"东南大学1",
@@ -23,7 +23,7 @@
                 },
                 {
                     "id": 3,
-                    "age": 23,
+                    "years": 3,
                     "name": "xxx",
                     "major": "企划",
                     "scholl":"东南大学2",
@@ -31,14 +31,15 @@
                 },
                 {
                     "id": 4,
-                    "age": 24,
+                    "years": 4,
                     "name": "xxx",
                     "major": "企划2",
                     "scholl":"东南大学3",
                     "pic": "https://fuss10.elemecdn.com/6/82/2cd3d681f5e93292b3eb49d6b412ajpeg.jpeg"
                 },
                 {
-                    "age": 25,
+                    "id": 55,
+                    "years": 5,
                     "name": "xxx",
                     "major": "企划3",
                     "scholl":"东南大学4",
@@ -46,7 +47,7 @@
                 },
                 {
                     "id": 5,
-                    "age": 26,
+                    "years": 6,
                     "name": "xxx",
                     "major": "教育1",
                     "scholl":"东南大学5",
@@ -54,7 +55,7 @@
                 },
                 {
                     "id": 6,
-                    "age": 27,
+                    "years": 7,
                     "name": "xxx",
                     "major": "教育2",
                     "scholl":"东南大学",
@@ -62,7 +63,7 @@
                 },
                 {
                     "id": 7,
-                    "age": 23,
+                    "years": 8,
                     "name": "xxx",
                     "major": "企划",
                     "scholl":"东南大学6",
@@ -77,7 +78,7 @@
             "ratings": [
                 {
                     "id": 8,
-                    "age": 23,
+                    "years": 9,
                     "name": "xxx",
                     "major": "教育1",
                     "scholl":"华东大学1",
@@ -85,7 +86,7 @@
                 },
                 {
                     "id": 9,
-                    "age": 23,
+                    "years": 4,
                     "name": "xxx",
                     "major": "教育2",
                     "scholl":"华东大学2",
@@ -93,7 +94,7 @@
                 },
                 {
                     "id": 10,
-                    "age": 23,
+                    "years": 5,
                     "name": "xxx",
                     "major": "企划",
                     "scholl":"华东大学3",
@@ -101,7 +102,7 @@
                 },
                 {
                     "id": 11,
-                    "age": 23,
+                    "years": 3,
                     "name": "xxx",
                     "major": "企划2",
                     "scholl":"华东大学4",
@@ -109,7 +110,7 @@
                 },
                 {
                     "id": 12,
-                    "age": 23,
+                    "years": 3,
                     "name": "xxx",
                     "major": "企划3",
                     "scholl":"华东大学5",
