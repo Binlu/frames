@@ -1,7 +1,7 @@
 <template>
     <div>
     	4234324
-        <img :src="item.pic" alt="">
+        <img v-if="item" :src="item.pic" alt="">
     </div>
 </template>
 
