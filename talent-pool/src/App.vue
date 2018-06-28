@@ -3,7 +3,7 @@
         <header-template></header-template>
         <div class="content container">
             <div class="row">
-                <div class="col-md-12">
+                <div class="col-md-12 position-title">
                     <position-ele :position="position"></position-ele>
                 </div>
             </div>

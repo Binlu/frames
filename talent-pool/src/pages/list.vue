@@ -2,7 +2,7 @@
     <div class="list-section">
         <div class="search">
 
-            <router-link to="">去添加我的人才</router-link>
+            <router-link to="/add">去添加我的人才</router-link>
 
             <input @keydown.13="listSearch" v-model="words" type="text" class="form-control" id="exampleInputPassword1" placeholder="请按照学校，行业 搜索人才">
             <button @click="listSearch" class="btn btn-primary" type="button">搜索</button>
