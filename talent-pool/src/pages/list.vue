@@ -50,7 +50,10 @@
             }
         },
         mounted() {
-            
+            // 不是第一次进入该页面数据缓存但重新加分页
+            if(this.searchList && this.searchList.length){
+                this.setPage()
+            }
         },
         computed: {
             // ...mapState(['lists']),
