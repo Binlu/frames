@@ -40,6 +40,7 @@ export default {
     },
     methods:{
         getStatus:function(){
+            console.log(this.$route);
             this.position.links=this.$route.meta.links;
             this.position.now_name=this.$route.meta.title;
         }

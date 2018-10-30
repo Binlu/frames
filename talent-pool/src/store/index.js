@@ -40,7 +40,6 @@ export default new Vuex.Store({
     mutations:{
         // name传递过来的数据
         putList(state, {lists}){
-            console.log(lists)
             state.lists = lists;//将传参设置给state的city
 		},
 		

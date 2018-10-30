@@ -326,6 +326,7 @@ define(['rotate-origin'],function(rotate_fn){
 			var self=this,d=self.def;
 			if(self.data.boxs.length>d.limit_number){return;}
 			var img=new Image(),nbox=null;
+			// img.crossOrigin = "anonymous";
 			img.addEventListener('load',function(){
 				nbox=self.setBox(id,img);
 				self.data.boxs.push(nbox);
@@ -476,7 +477,16 @@ define(['rotate-origin'],function(rotate_fn){
 			if(tag){
 				tag.style.cssText='z-index:'+item.zindex+';left:'+(x-this.def.border_width)+'px;top:'+(y-this.def.border_width)+'px;width:'+nw+'px;height:'+nh+'px;transform:rotateZ('+item.rotate+'deg)';
 			}
-		}
+
+			// this.filterColor(1);
+
+		},
+
+		// filterColor:function(type){										//滤镜
+
+		// 	var data=this.ctx.getImageData(0,0,this.canvas.width,this.canvas.height);
+		// 	console.log(data);
+		// },
 	};
 
 

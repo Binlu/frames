@@ -12,6 +12,7 @@ import add from '@/pages/add'
 Vue.use(Router)
 
 export default new Router({
+    mode:'history',
     routes: [
         {
           	path: '/',
@@ -43,7 +44,7 @@ export default new Router({
                 },
                 {
                     name:'列表',
-                    href:'#/list',
+                    href:'/list',
                 }],
                 title:'详情'
             },
@@ -59,7 +60,7 @@ export default new Router({
                 },
                 {
                     name:'列表',
-                    href:'#/list',
+                    href:'/list',
                 }],
                 title:'新增'
             },
