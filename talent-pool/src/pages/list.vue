@@ -107,6 +107,7 @@
         },
         created() {
             this.getLists();  //获取列表数据
+            console.log('test')
         },
     }
 </script>
